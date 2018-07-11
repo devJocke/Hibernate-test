@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration">
+
+<hibernate-mapping>
+    <class name="data.StudentClass" table="dbo.StudentClass">
+
+        <meta attribute="class-description">
+            This class contains the student detail.
+        </meta>
+
+        <id name="studentClassId" type="int" column="id">
+            <generator class="identity"/>
+        </id>
+
+        <property name="title" column="Title" type="string"/>
+        <property name="year" column="Year" type="date"/>
+
+    </class>
+</hibernate-mapping>
