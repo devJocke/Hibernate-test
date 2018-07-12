@@ -1,38 +1,49 @@
 package data;
 
+import javax.persistence.*;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+@Entity
+@Table(name = "UnicornClass", schema = "dbo", catalog = "mobileRemoteDb")
 public class UnicornClass {
 
-    private Set<Unicorn> unicorn = new HashSet<>();
-
+//    private Set<Unicorn> unicorns = new HashSet<>();
+    private Unicorn unicorn  = new Unicorn();
+    @Id
     private int id;
     private String title;
     private Date year;
 
-    public UnicornClass() {
-    }
+    public UnicornClass() { }
 
-    public UnicornClass(String title, Date year) {
+    private UnicornClass(String title, Date year) {
         this.title = title;
         this.year = year;
     }
 
-    public Set<Unicorn> getUnicorn() {
+//    public Set<Unicorn> getUnicorns() {
+//        return unicorns;
+//    }
+//
+//    public void setUnicorns(Set<Unicorn> unicorns) {
+//        this.unicorns = unicorns;
+//    }
+
+    public Unicorn getUnicorn() {
         return unicorn;
     }
 
-    public void setUnicorn(Set<Unicorn> unicorn) {
+    public void setUnicorn(Unicorn unicorn) {
         this.unicorn = unicorn;
     }
 
     public static class UnicornClassBuilder {
 
-        private String title;
-        private Date year;
+        private final String title;
+        private final Date year;
 
         public UnicornClassBuilder(String title, Date year) {
             this.title = title;
@@ -42,41 +53,14 @@ public class UnicornClass {
         public UnicornClass build() {
             return new UnicornClass(title, year);
         }
-
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    private void setId(int id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    private void setTitle(String title) {
-        this.title = title;
-    }
-
-    public java.sql.Date getYear() {
-        return year;
-    }
-
-    private void setYear(java.sql.Date year) {
-        this.year = year;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UnicornClass)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         UnicornClass that = (UnicornClass) o;
         return id == that.id &&
-                Objects.equals(unicorn, that.unicorn) &&
                 Objects.equals(title, that.title) &&
                 Objects.equals(year, that.year);
     }
@@ -84,6 +68,6 @@ public class UnicornClass {
     @Override
     public int hashCode() {
 
-        return Objects.hash(unicorn, id, title, year);
+        return Objects.hash(id, title, year);
     }
 }
