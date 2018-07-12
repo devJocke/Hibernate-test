@@ -11,11 +11,12 @@ import java.util.Set;
 public class UnicornClass {
 
 //    private Set<Unicorn> unicorns = new HashSet<>();
-    private Unicorn unicorn  = new Unicorn();
     @Id
     private int id;
     private String title;
     private Date year;
+    @OneToOne
+    private Unicorn unicorn  = new Unicorn();
 
     public UnicornClass() { }
 

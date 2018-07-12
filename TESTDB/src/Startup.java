@@ -26,12 +26,14 @@ public class Startup {
             UnicornClass unicornClass = new UnicornClass.UnicornClassBuilder("biologi", new Date('2')).build();
 
             unicornClass.setUnicorn(unicorn);
+            session.save(unicorn);
             session.save(unicornClass);
 
             session.getTransaction().commit();
-            System.out.println("Unicorn named " + unicornClass.getUnicorn().getFirstName());
-            session.beginTransaction(); 
 
+            session.beginTransaction();
+            UnicornClass unicornClass1 = session.load(UnicornClass.class, 0);
+            System.out.println("Unicorn named " + unicornClass1.getUnicorn().getFirstName());
             session.getTransaction().commit();
 
         } catch (Throwable ex) {

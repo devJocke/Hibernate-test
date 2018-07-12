@@ -3,10 +3,14 @@ package data;
 import javax.persistence.*;
 import java.util.Objects;
 
-
-@Embeddable
+//Creates the table
+@Entity
+// Used so we can link objects together
+//@Embeddable
 public class Unicorn {
 
+    @Id
+    private int id;
     private String firstName;
     private String lastName;
     private String thirdName;
