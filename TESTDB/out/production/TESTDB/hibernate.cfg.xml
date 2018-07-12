@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+        "http://www.hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 
 <hibernate-configuration>
     <session-factory>
@@ -11,8 +11,9 @@
         <property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
-        <mapping resource="Student.hbm.xml"/>
-        <mapping resource="StudentClass.hbm.xml"/>
+        <mapping resource="Unicorn.hbm.xml"/>
+        <mapping resource="UnicornClass.hbm.xml"/>
 
     </session-factory>
+
 </hibernate-configuration>

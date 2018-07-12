@@ -1,26 +1,36 @@
 package data;
 
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity
-@Table(name = "Student", catalog = "data")
-public class Student {
+import java.util.Objects;
+
+public class Unicorn {
 
     private int id;
     private String firstName;
     private String lastName;
     private String thirdName;
 
-    @OneToMany(mappedBy="student")
-    private Set<StudentClass> studentClass = new HashSet< >(0);
+    public Unicorn() {
+    }
 
-    private Student(){}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Unicorn)) return false;
+        Unicorn unicorn = (Unicorn) o;
+        return id == unicorn.id &&
+                Objects.equals(firstName, unicorn.firstName) &&
+                Objects.equals(lastName, unicorn.lastName) &&
+                Objects.equals(thirdName, unicorn.thirdName);
+    }
 
-    private Student(String firstName, String lastName, String thirdName) {
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, firstName, lastName, thirdName);
+    }
+
+    private Unicorn(String firstName, String lastName, String thirdName) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.thirdName = thirdName;
@@ -59,25 +69,23 @@ public class Student {
         this.thirdName = thirdName;
     }
 
-    public Set<StudentClass> getStudentClass() {
-        return this.studentClass;
-    }
 
-
-    public static class StudentBuilder {
+    public static class UnicornBuilder {
 
         private String firstName;
         private String lastName;
         private String thirdName;
 
-        public StudentBuilder(String firstName, String lastName, String thirdName) {
+        public UnicornBuilder(String firstName, String lastName, String thirdName) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.thirdName = thirdName;
         }
 
-        public Student build() {
-            return new Student(firstName, lastName, thirdName);
+        public Unicorn build() {
+            return new Unicorn(firstName, lastName, thirdName);
         }
     }
+
+
 }
