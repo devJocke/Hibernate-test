@@ -32,6 +32,8 @@
       <root url="jar://$PROJECT_DIR$/lib/spring-orm-4.3.18.RELEASE.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ideaLibSources/hibernate-core-5.2.16.Final-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>

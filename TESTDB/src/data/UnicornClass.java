@@ -2,44 +2,45 @@ package data;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "UnicornClass", schema = "dbo", catalog = "mobileRemoteDb")
 public class UnicornClass {
 
-//    private Set<Unicorn> unicorns = new HashSet<>();
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
     private Date year;
-    @OneToOne
-    private Unicorn unicorn  = new Unicorn();
+    @OneToMany(mappedBy = "unicornClass")
+    private List<Unicorn> unicorns = new ArrayList<>();
 
-    public UnicornClass() { }
+    public UnicornClass() {
+    }
 
     private UnicornClass(String title, Date year) {
         this.title = title;
         this.year = year;
     }
 
-//    public Set<Unicorn> getUnicorns() {
-//        return unicorns;
-//    }
-//
-//    public void setUnicorns(Set<Unicorn> unicorns) {
-//        this.unicorns = unicorns;
-//    }
-
-    public Unicorn getUnicorn() {
-        return unicorn;
+    public List<Unicorn> getUnicorns() {
+        return unicorns;
     }
 
-    public void setUnicorn(Unicorn unicorn) {
-        this.unicorn = unicorn;
+    public void setUnicorns(List<Unicorn> unicorns) {
+        this.unicorns = unicorns;
     }
+
+
+    public String getTitle() {
+        return title;
+    }
+
+    public Date getYear() {
+        return year;
+    }
+
 
     public static class UnicornClassBuilder {
 
@@ -68,7 +69,6 @@ public class UnicornClass {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, title, year);
     }
 }

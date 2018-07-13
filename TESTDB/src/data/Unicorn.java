@@ -1,6 +1,8 @@
 package data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 //Creates the table
@@ -10,12 +12,18 @@ import java.util.Objects;
 public class Unicorn {
 
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private int id;
+
     private String firstName;
     private String lastName;
     private String thirdName;
 
-    public Unicorn(){}
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<UnicornClass> unicornClass = new ArrayList<UnicornClass>();
+
+    public Unicorn() {
+    }
 
     private Unicorn(String firstName, String lastName, String thirdName) {
         this.firstName = firstName;
@@ -47,28 +55,37 @@ public class Unicorn {
         this.thirdName = thirdName;
     }
 
-    public static class UnicornBuilder{
+    public List<UnicornClass> getUnicornClass() {
+        return unicornClass;
+    }
+
+    public void setUnicornClass(List<UnicornClass> unicornClass) {
+        this.unicornClass = unicornClass;
+    }
+
+    public static class UnicornBuilder {
 
         private final String firstName;
         private final String lastName;
         private final String thirdName;
 
-        public UnicornBuilder(String firstName, String lastName, String thirdName){
+        public UnicornBuilder(String firstName, String lastName, String thirdName) {
             this.firstName = firstName;
             this.lastName = lastName;
             this.thirdName = thirdName;
         }
 
-        public Unicorn build(){
-            return new Unicorn(firstName,lastName,thirdName);
+        public Unicorn build() {
+            return new Unicorn(firstName, lastName, thirdName);
         }
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Unicorn that = (Unicorn) o;
-        return   Objects.equals(firstName, that.firstName) &&
+        return Objects.equals(firstName, that.firstName) &&
                 Objects.equals(lastName, that.lastName) &&
                 Objects.equals(thirdName, that.thirdName);
     }
