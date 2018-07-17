@@ -16,7 +16,13 @@ public class Startup {
         try {
             session = new Configuration().configure().addAnnotatedClass(Unicorn.class).addAnnotatedClass(UnicornClass.class).buildSessionFactory().openSession();
 
-            List<UnicornClass> unicornClasses = setupClasses();
+            List<UnicornClass> unicornClasses = new ArrayList<>();
+            Query query = session.createQuery("select distinct title from UnicornClass");
+
+            if (query.list().isEmpty()) {
+                unicornClasses = setupClasses();
+            }
+
             List<Unicorn> unicornss = setupUnicorns();
 
             session.beginTransaction();
@@ -26,28 +32,14 @@ public class Startup {
                     session.save(setClassWithUnicorn(unicornClass, unicorn));
                 }
             }
+
             for (UnicornClass unicornClass : unicornClasses) {
                 for (Unicorn unicorn : unicornss) {
                     session.save(setUnicornInClass(unicorn, unicornClass));
                 }
             }
             session.getTransaction().commit();
-
-//            UnicornClass unicornClass1 = session.get(UnicornClass.class, 1);
-
-//            Unicorn unicorn3 =  session.get(Unicorn.class, 3);
-//            System.out.println("Unicorn named " + unicorn3.getFirstName());
-//            System.out.println("Unicorn named " + unicorn3.getUnicornClass().get(0).getTitle());
-//            System.out.println("Unicorn named " + unicorn3.getUnicornClass().size());
-
-            Query query = session.createQuery("from Unicorn");
-            List<Unicorn> unicorns = query.list();
-            for (Unicorn unicorn1 : unicorns) {
-                System.out.println("Unicorn named " + unicorn1.getFirstName());
-            }
-
-//            session.getTransaction().commit();
-
+             
         } catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);

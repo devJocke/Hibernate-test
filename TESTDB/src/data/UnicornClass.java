@@ -11,9 +11,11 @@ public class UnicornClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
     private String title;
     private Date year;
-    @OneToMany(mappedBy = "unicornClass")
+
+    @ManyToMany(mappedBy = "unicornClass")
     private List<Unicorn> unicorns = new ArrayList<>();
 
     public UnicornClass() {
