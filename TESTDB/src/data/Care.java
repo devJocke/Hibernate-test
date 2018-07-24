@@ -12,55 +12,79 @@ public class Care {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int disciplineId;
-    private int playId;
-    private int flushId;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "disciplineId")
+    private Discipline discipline;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "playId")
+    private Play play;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "flushId")
+    private Flush flush;
 
 
-    public Care(int disciplineId, int playId, int flushId ) {
-        this.disciplineId = disciplineId;
-        this.playId = playId;
-        this.flushId = flushId;
+    Care() {
+        setDiscipline(new Discipline());
+        setPlay(new Play());
+        setFlush(new Flush());
+    }
+
+    public Discipline getDiscipline() {
+        return discipline;
+    }
+
+    private void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
+    }
+
+    public Play getPlay() {
+        return play;
+    }
+
+    private void setPlay(Play play) {
+        this.play = play;
+    }
+
+    public Flush getFlush() {
+        return flush;
+    }
+
+    private void setFlush(Flush flush) {
+        this.flush = flush;
     }
 
 
-    private Care( ) {
+//    private Care(int disciplineId, int playId, int flushId) {
+//        this.disciplineId = disciplineId;
+//        this.playId = playId;
+//        this.flushId = flushId;
+//    }
+
+    public static class CareBuilder {
+
+//        private final int disciplineId;
+//        private final int playId;
+//        private final int flushId;
+
+//        public CareBuilder(int disciplineId, int playId, int flushId) {
+//
+//            this.disciplineId = disciplineId;
+//            this.playId = playId;
+//            this.flushId = flushId;
+//        }
+
+        public void build() {
+//            return new Care(disciplineId, playId, flushId);
+        }
     }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    private void setId(int id) {
         this.id = id;
     }
-
-
-    public int getDisciplineId() {
-        return disciplineId;
-    }
-
-    public void setDisciplineId(int disciplineId) {
-        this.disciplineId = disciplineId;
-    }
-
-
-    public int getPlayId() {
-        return playId;
-    }
-
-    public void setPlayId(int playId) {
-        this.playId = playId;
-    }
-
-
-    public int getFlushId() {
-        return flushId;
-    }
-
-    public void setFlushId(int flushId) {
-        this.flushId = flushId;
-    }
-
-
 }

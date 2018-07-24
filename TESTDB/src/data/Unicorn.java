@@ -36,6 +36,8 @@ public class Unicorn {
         this.firstName = firstName;
         this.lastName = lastName;
         this.thirdName = thirdName;
+        Care care = new Care();
+        setCare(care);
     }
 
     private Unicorn() {
@@ -115,7 +117,13 @@ public class Unicorn {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(id, firstName, lastName, thirdName, unicornClasses);
+    }
+
+    @Override
+    public String toString() {
+        return  firstName + ' ' +
+                lastName + ' ' +
+                thirdName;
     }
 }

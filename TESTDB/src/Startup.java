@@ -2,11 +2,10 @@ import data.*;
 import data.Unicorn;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.internal.NativeQueryImpl;
 
-import javax.persistence.ParameterMode;
-import javax.persistence.Query;
-import javax.persistence.StoredProcedureQuery;
-import java.sql.Date;
+import javax.persistence.TypedQuery;
 import java.util.*;
 
 public class Startup {
@@ -16,7 +15,7 @@ public class Startup {
 
         /**
          * 1. First time start, create new unicorn
-         * ask for Unicorn properties fname(not null),lname,tname
+         * Check - Ask for Unicorn properties fname(not null),lname,tname
          * Tell user that she needs to attend the unicorn and do the following
          * Play, Discipline, Flush
          *
@@ -28,37 +27,62 @@ public class Startup {
          * --> Update attended property and somehow set a timer that will change the value to 0 <--
          *
          * 3. Nothing yet
+         *
+         *
+         *
          */
 
-        Session session;
+        Session session = setupSessionConfiguration();
 
         try {
-            session = new Configuration().configure()
-                    .addAnnotatedClass(UnicornClass.class)
-                    .addAnnotatedClass(Care.class)
-                    .addAnnotatedClass(Unicorn.class)
-                    .addAnnotatedClass(Flush.class)
-                    .addAnnotatedClass(Discipline.class)
-                    .addAnnotatedClass(Play.class)
-                    .buildSessionFactory().openSession();
 
             session.beginTransaction();
-            Care care = new Care(0, 0, 0);
-            Unicorn unicorn = createNewUnicornFromUserInput();
-            unicorn.setCare(care);
-            session.save(unicorn);
-            Query query = session.createNativeQuery("select * from Care inner join Unicorn U on Care.id = U.unicornCareId", Care.class);
+//            Unicorn newUnicorn = createNewUnicornFromUserInput();
+//            session.save(newUnicorn);
 
-           System.out.print(((Care) query.getSingleResult()).getDisciplineId());
+            System.out.print("\\\n" +
+                    " \\ji\n" +
+                    " /.((( \n" +
+                    "(,/\"(((__,--.\n" +
+                    "    \\  ) _( /{ \n" +
+                    "    !|| \" :||      \n" +
+                    "    !||   :|| \n" +
+                    "    '''   ''' ");
+
+            TypedQuery<Unicorn> unicornTypedQuery = session.createNativeQuery("select * from Unicorn", Unicorn.class);
+
+//            TypedQuery<Care> care = session.createNativeQuery("select * from Care \n" +
+//                    "inner join Unicorn U on C.id = U.unicornCareId", Care.class);
+
+            Unicorn unicorn =unicornTypedQuery.getSingleResult();
+             Care care = unicorn.getCare();
+            care.getFlush();
+            care.getPlay();
+            if(care.getDiscipline().getMood().equals("Default")){
+                System.out.println(unicorn.getFirstName() + " is " + care.getDiscipline().getMood());
+            }
+
+//            TypedQuery<Discipline> discipline = session.createNativeQuery("select * from Discipline \n" +
+//                    "inner join Care C on C.id = Discipline.id\n" +
+//                    "inner join Unicorn U on C.id = U.unicornCareId", Discipline.class);
+
+//            System.out.print(discipline.getSingleResult().getMood());
+
+//            TypedQuery<Unicorn> unicornTypedQuery = session.createNativeQuery("select * from Unicorn", Unicorn.class);
+//            Unicorn unicorn = unicornTypedQuery.getSingleResult();
+
+//            System.out.println("This is your new unicorn, meet " + unicorn + "");
+
+
 //            List<UnicornClass> unicornClasses;
-//            TypedQuery<UnicornClass> query = session.createNativeQuery("select * from UnicornClass  where UnicornClass.subject = 'biologi'", UnicornClass.class);
+//            TypedQuery<UnicornClass> discipline = session.createNativeQuery("select * from UnicornClass  where UnicornClass.subject = 'biologi'", UnicornClass.class);
 //
 //            session.beginTransaction();
 //
 //            List<Unicorn> unicorns = setupUnicorns();
 //
 //
-//            if (query.getResultList().isEmpty()) {
+//            if (discipline.getResultList().isEmpty()) {
 //                unicornClasses = setupClasses();
 //                for (UnicornClass unicornClass1 : unicornClasses) {
 //                    for (Unicorn unicorn : unicorns) {
@@ -67,7 +91,7 @@ public class Startup {
 //                    }
 //                }
 //            } else {
-//                unicornClasses = query.getResultList();
+//                unicornClasses = discipline.getResultList();
 //            }
 //
 //            Care care = new Care(1, 1, 1, 1, unicorns.get(0));
@@ -75,7 +99,7 @@ public class Startup {
 //            System.out.println(unicorns.get(0).getCare());
 //
 //            System.out.println(unicornClasses.get(0).getSubject());
-             session.getTransaction().commit();
+            session.getTransaction().commit();
 //
         } catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
@@ -88,6 +112,17 @@ public class Startup {
 //        updateDisciplineStatus(session);
 //        System.out.println("Done");
         session.close();
+    }
+
+    private static Session setupSessionConfiguration() {
+        return new Configuration().configure()
+                .addAnnotatedClass(UnicornClass.class)
+                .addAnnotatedClass(Care.class)
+                .addAnnotatedClass(Unicorn.class)
+                .addAnnotatedClass(Flush.class)
+                .addAnnotatedClass(Discipline.class)
+                .addAnnotatedClass(Play.class)
+                .buildSessionFactory().openSession();
     }
 
     private static void requestUnicornDiscipline() {
@@ -113,7 +148,7 @@ public class Startup {
 //        System.out.println(" Thirdname : " + thirdName);
 
 //        return new Unicorn.UnicornBuilder(firstName, lastName, thirdName).build();
-        return new Unicorn.UnicornBuilder("a", "a", "a").build();
+        return new Unicorn.UnicornBuilder("Börje", "Börjesson", "Bjorn").build();
     }
 
 //    private static void updateDisciplineStatus(Session session) {

@@ -12,15 +12,15 @@ public class Flush {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
-  private String flush;
+  private String flush  = "Default";
 
-  private Flush(){}
+  public Flush(){}
 
   public int getId() {
     return id;
   }
 
-  public void setId(int id) {
+  private void setId(int id) {
     this.id = id;
   }
 
@@ -29,7 +29,7 @@ public class Flush {
     return flush;
   }
 
-  public void setFlush(String flush) {
+  private void setFlush(String flush) {
     this.flush = flush;
   }
 

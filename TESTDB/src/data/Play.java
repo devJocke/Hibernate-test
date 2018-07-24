@@ -12,16 +12,17 @@ public class Play {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String game;
-    private String gameStatus;
+    private String game = "Default";
+    private String gameStatus = "Default";
 
-private Play(){}
+    public Play() {
+    }
 
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    private void setId(int id) {
         this.id = id;
     }
 
@@ -30,7 +31,7 @@ private Play(){}
         return game;
     }
 
-    public void setGame(String game) {
+    private void setGame(String game) {
         this.game = game;
     }
 
@@ -39,7 +40,7 @@ private Play(){}
         return gameStatus;
     }
 
-    public void setGameStatus(String gameStatus) {
+    private void setGameStatus(String gameStatus) {
         this.gameStatus = gameStatus;
     }
 

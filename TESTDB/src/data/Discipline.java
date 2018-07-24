@@ -12,10 +12,10 @@ public class Discipline {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String mood;
-    private String temperament;
+    private String mood = "Default";
+    private String temperament = "Default";
 
-    private Discipline() {
+    public Discipline() {
     }
 
     public int getId() {
