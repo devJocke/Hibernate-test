@@ -16,17 +16,6 @@ public class Care {
     private int playId;
     private int flushId;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "unicornId")
-    private Unicorn unicorn;
-
-    public Unicorn getUnicorn() {
-        return unicorn;
-    }
-
-    public void setUnicorn(Unicorn unicorn) {
-        this.unicorn = unicorn;
-    }
 
     public Care(int disciplineId, int playId, int flushId ) {
         this.disciplineId = disciplineId;

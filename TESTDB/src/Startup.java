@@ -45,40 +45,107 @@ public class Startup {
             session.beginTransaction();
             Care care = new Care(0, 0, 0);
             Unicorn unicorn = createNewUnicornFromUserInput();
-            care.setUnicorn(unicorn);
             unicorn.setCare(care);
             session.save(unicorn);
-            Query query = session.createNativeQuery("select * from Care inner join Unicorn U on Care.unicornId = U.id", Care.class);
+            Query query = session.createNativeQuery("select * from Care inner join Unicorn U on Care.id = U.unicornCareId", Care.class);
 
-            System.out.print(((Care) query.getSingleResult()).getDisciplineId());
-            session.getTransaction().commit();
+           System.out.print(((Care) query.getSingleResult()).getDisciplineId());
+//            List<UnicornClass> unicornClasses;
+//            TypedQuery<UnicornClass> query = session.createNativeQuery("select * from UnicornClass  where UnicornClass.subject = 'biologi'", UnicornClass.class);
+//
+//            session.beginTransaction();
+//
+//            List<Unicorn> unicorns = setupUnicorns();
+//
+//
+//            if (query.getResultList().isEmpty()) {
+//                unicornClasses = setupClasses();
+//                for (UnicornClass unicornClass1 : unicornClasses) {
+//                    for (Unicorn unicorn : unicorns) {
+//                        session.save(setClassWithUnicorn(unicornClass1, unicorn));
+//                        session.save(setUnicornInClass(unicorn, unicornClass1));
+//                    }
+//                }
+//            } else {
+//                unicornClasses = query.getResultList();
+//            }
+//
+//            Care care = new Care(1, 1, 1, 1, unicorns.get(0));
+//            session.save(care);
+//            System.out.println(unicorns.get(0).getCare());
+//
+//            System.out.println(unicornClasses.get(0).getSubject());
+             session.getTransaction().commit();
 //
         } catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);
         }
+
+
+//        requestUnicornDiscipline();
+
+//        updateDisciplineStatus(session);
+//        System.out.println("Done");
         session.close();
+    }
+
+    private static void requestUnicornDiscipline() {
+
     }
 
     private static Unicorn createNewUnicornFromUserInput() {
         Scanner userInput = new Scanner(System.in);
 
-        System.out.print("Enter unicorn firstname: ");
-        String firstName = userInput.next();
+//        System.out.print("Enter unicorn firstname: ");
+//        String firstName = userInput.next();
+//
+//        System.out.print("Enter unicorn lastname: ");
+//        String lastName = userInput.next();
+//
+//        System.out.print("Enter unicorn thirdname: ");
+//        String thirdName = userInput.next();
+//
+//        userInput.close();
+//        System.out.println(" A new Unicorn has been created, take good care of him!");
+//        System.out.println(" Firstname : " + firstName);
+//        System.out.println(" Lastname : " + lastName);
+//        System.out.println(" Thirdname : " + thirdName);
 
-        System.out.print("Enter unicorn lastname: ");
-        String lastName = userInput.next();
-
-        System.out.print("Enter unicorn thirdname: ");
-        String thirdName = userInput.next();
-
-        userInput.close();
-        System.out.println(" A new Unicorn has been created, take good care of him!");
-        System.out.println(" Firstname : " + firstName);
-        System.out.println(" Lastname : " + lastName);
-        System.out.println(" Thirdname : " + thirdName);
-
-        return new Unicorn.UnicornBuilder(firstName, lastName, thirdName).build();
+//        return new Unicorn.UnicornBuilder(firstName, lastName, thirdName).build();
+        return new Unicorn.UnicornBuilder("a", "a", "a").build();
     }
 
+//    private static void updateDisciplineStatus(Session session) {
+//        StoredProcedureQuery storedProcedure = session.createStoredProcedureQuery("UpdateDiscipline");
+//        storedProcedure.registerStoredProcedureParameter("firstName", String.class, ParameterMode.IN);
+//        storedProcedure.setParameter("firstName", "Senaste");
+//
+//        storedProcedure.execute();
+//        System.out.println(storedProcedure.getSingleResult());
+//    }
+//
+//    private static List<UnicornClass> setupClasses() {
+//        List<UnicornClass> unicornClasses = new ArrayList<>();
+//        unicornClasses.add(new UnicornClass.UnicornClassBuilder("Biologi", new Date('2')).build());
+//        unicornClasses.add(new UnicornClass.UnicornClassBuilder("It", new Date('3')).build());
+//        return unicornClasses;
+//    }
+//
+//    private static List<Unicorn> setupUnicorns() {
+//        List<Unicorn> unicornClasses = new ArrayList<>();
+//        unicornClasses.add(new Unicorn.UnicornBuilder("Stefan", "Stefansson", "Steffe", 1).build());
+//        unicornClasses.add(new Unicorn.UnicornBuilder("Börje", "Börjesson", "Börje", 1).build());
+//        return unicornClasses;
+//    }
+//
+//    private static Unicorn setUnicornInClass(Unicorn unicorn, UnicornClass unicornClass) {
+//        unicorn.getUnicornClass().add(unicornClass);
+//        return unicorn;
+//    }
+//
+//    private static UnicornClass setClassWithUnicorn(UnicornClass unicornClass, Unicorn unicorn) {
+//        unicornClass.getUnicorns().add(unicorn);
+//        return unicornClass;
+//    }
 }
