@@ -5,9 +5,9 @@
 
 <hibernate-configuration>
     <session-factory>
-        <property name="hbm2ddl.auto">create</property>
+        <!--<property name="hbm2ddl.auto">create</property>-->
         <property name="dialect">org.hibernate.dialect.SQLServer2012Dialect</property>
-        <property name="connection.url">jdbc:jtds:sqlserver://DESKTOP-5SFGERQ:1433/mobileRemoteDb;instance=SQLEXPRESS
+        <property name="connection.url">jdbc:jtds:sqlserver://./mobileRemoteDb;instance=;namedPipe=true
         </property>
         <property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property>
         <property name="show_sql">true</property>

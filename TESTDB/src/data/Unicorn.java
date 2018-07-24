@@ -1,29 +1,36 @@
 package data;
 
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-//Creates the table
 @Entity
-// Used so we can link objects together
-//@Embeddable
+@Table(name = "Unicorn", schema = "dbo", catalog = "mobileRemoteDb")
 public class Unicorn {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String firstName;
     private String lastName;
     private String thirdName;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<UnicornClass> unicornClass = new ArrayList<UnicornClass>();
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "unicornCareId")
+    private Care care;
 
-    public Unicorn() {
+    public Care getCare() {
+        return care;
     }
+
+    public void setCare(Care care) {
+        this.care = care;
+    }
+
+    @ManyToMany
+    private List<UnicornClass> unicornClasses = new ArrayList<>();
 
     private Unicorn(String firstName, String lastName, String thirdName) {
         this.firstName = firstName;
@@ -31,43 +38,57 @@ public class Unicorn {
         this.thirdName = thirdName;
     }
 
+    private Unicorn() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+
     public String getFirstName() {
         return firstName;
     }
 
-    private void setFirstName(String firstName) {
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
+
 
     public String getLastName() {
         return lastName;
     }
 
-    private void setLastName(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
 
     public String getThirdName() {
         return thirdName;
     }
 
-    private void setThirdName(String thirdName) {
+    public void setThirdName(String thirdName) {
         this.thirdName = thirdName;
     }
 
     public List<UnicornClass> getUnicornClass() {
-        return unicornClass;
+        return unicornClasses;
     }
 
-    public void setUnicornClass(List<UnicornClass> unicornClass) {
-        this.unicornClass = unicornClass;
+    private void setUnicornClass(List<UnicornClass> unicornClassList) {
+        this.unicornClasses = unicornClassList;
     }
 
     public static class UnicornBuilder {
-
         private final String firstName;
         private final String lastName;
         private final String thirdName;
+        private int careId;
 
         public UnicornBuilder(String firstName, String lastName, String thirdName) {
             this.firstName = firstName;
@@ -83,16 +104,18 @@ public class Unicorn {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Unicorn that = (Unicorn) o;
-        return Objects.equals(firstName, that.firstName) &&
-                Objects.equals(lastName, that.lastName) &&
-                Objects.equals(thirdName, that.thirdName);
+        if (!(o instanceof Unicorn)) return false;
+        Unicorn unicorn = (Unicorn) o;
+        return id == unicorn.id &&
+                Objects.equals(firstName, unicorn.firstName) &&
+                Objects.equals(lastName, unicorn.lastName) &&
+                Objects.equals(thirdName, unicorn.thirdName) &&
+                Objects.equals(unicornClasses, unicorn.unicornClasses);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(firstName, lastName, thirdName);
+        return Objects.hash(id, firstName, lastName, thirdName, unicornClasses);
     }
 }
