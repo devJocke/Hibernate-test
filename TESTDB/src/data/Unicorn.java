@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Unicorn", schema = "dbo", catalog = "mobileRemoteDb")
-public class Unicorn {
+public class Unicorn  extends Needs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

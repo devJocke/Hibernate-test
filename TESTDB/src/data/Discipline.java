@@ -1,47 +1,42 @@
 package data;
 
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Discipline {
-
+ 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String mood = "Default";
-    private String temperament = "Default";
+    private boolean angry = false;
+    @Transient
+    private Map<String,Boolean> map= new HashMap<>();
 
-    public Discipline() {
+    Discipline() {
     }
 
-    public int getId() {
+    private int getId() {
         return id;
     }
 
-    public void setId(int id) {
+    private void setId(int id) {
         this.id = id;
     }
 
-
-    public String getMood() {
-        return mood;
+    private boolean isAngry() {
+        return angry;
     }
 
-    public void setMood(String mood) {
-        this.mood = mood;
+    private void setAngry(boolean angry) {
+        this.angry = angry;
     }
 
-
-    public String getTemperament() {
-        return temperament;
+    Map<String, Boolean> getNeeds() {
+        if (!isAngry()) {
+            map.put("Börje is angry", isAngry());
+        }
+        return map;
     }
-
-    public void setTemperament(String temperament) {
-        this.temperament = temperament;
-    }
-
 }

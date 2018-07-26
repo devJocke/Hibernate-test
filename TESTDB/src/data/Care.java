@@ -2,11 +2,12 @@ package data;
 
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 @Table(name = "Care", schema = "dbo", catalog = "mobileRemoteDb")
-public class Care {
+public class Care extends Needs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,9 @@ public class Care {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "flushId")
     private Flush flush;
+
+    @Transient
+    private Map<String, Boolean> needs = new HashMap<>();
 
 
     Care() {
@@ -55,29 +59,11 @@ public class Care {
         this.flush = flush;
     }
 
-
-//    private Care(int disciplineId, int playId, int flushId) {
-//        this.disciplineId = disciplineId;
-//        this.playId = playId;
-//        this.flushId = flushId;
-//    }
-
-    public static class CareBuilder {
-
-//        private final int disciplineId;
-//        private final int playId;
-//        private final int flushId;
-
-//        public CareBuilder(int disciplineId, int playId, int flushId) {
-//
-//            this.disciplineId = disciplineId;
-//            this.playId = playId;
-//            this.flushId = flushId;
-//        }
-
-        public void build() {
-//            return new Care(disciplineId, playId, flushId);
-        }
+    Map<String, Boolean> getAllNeeds() {
+        needs.putAll(getPlay().getNeeds());
+        needs.putAll(getDiscipline().getNeeds());
+        needs.putAll(getFlush().getNeeds());
+        return needs;
     }
 
     public int getId() {

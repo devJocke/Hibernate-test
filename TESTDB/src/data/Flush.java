@@ -1,36 +1,44 @@
 package data;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Flush {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int id;
-  private String flush  = "Default";
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    private boolean toilet = false;
+    @Transient
+    private Map<String, Boolean> map = new HashMap<>();
 
-  public Flush(){}
+    public Flush() {
+    }
 
-  public int getId() {
-    return id;
-  }
+    public int getId() {
+        return id;
+    }
 
-  private void setId(int id) {
-    this.id = id;
-  }
+    private void setId(int id) {
+        this.id = id;
+    }
 
 
-  public String getFlush() {
-    return flush;
-  }
+    public boolean isToilet() {
+        return toilet;
+    }
 
-  private void setFlush(String flush) {
-    this.flush = flush;
-  }
+    public void setToilet(boolean toilet) {
+        this.toilet = toilet;
+    }
 
+    public Map<String, Boolean> getNeeds() {
+        if (!isToilet()) {
+            map.put("Börje needs to go to the toilet", isToilet());
+        }
+        return map;
+    }
 }

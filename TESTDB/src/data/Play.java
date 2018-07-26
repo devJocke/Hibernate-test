@@ -1,10 +1,9 @@
 package data;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Play {
@@ -12,10 +11,21 @@ public class Play {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String game = "Default";
-    private String gameStatus = "Default";
+    private boolean bored = false;
+    @Transient
+    private boolean football = false;
+    @Transient
+    private Map<String, Boolean> map = new HashMap<>();
 
-    public Play() {
+    Play() {
+    }
+
+    boolean isBored() {
+        return bored;
+    }
+
+    private void setBored(boolean bored) {
+        this.bored = bored;
     }
 
     public int getId() {
@@ -26,22 +36,21 @@ public class Play {
         this.id = id;
     }
 
-
-    public String getGame() {
-        return game;
+    boolean isFootball() {
+        return football;
     }
 
-    private void setGame(String game) {
-        this.game = game;
+    private void setFootball(boolean football) {
+        this.football = football;
     }
 
-
-    public String getGameStatus() {
-        return gameStatus;
+    Map<String, Boolean> getNeeds() {
+        if (!isBored()) {
+            map.put("Börje is bored", isBored());
+        }
+        if (!isFootball()) {
+            map.put("Börje wants to play football", isFootball());
+        }
+        return map;
     }
-
-    private void setGameStatus(String gameStatus) {
-        this.gameStatus = gameStatus;
-    }
-
 }
