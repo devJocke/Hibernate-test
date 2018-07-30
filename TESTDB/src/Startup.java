@@ -1,10 +1,9 @@
-import data.*;
-import data.Unicorn;
+import Dal.AccessUnicorn;
+import Data.Care;
+import Data.Unicorn;
 import org.hibernate.*;
-import org.hibernate.cfg.Configuration;
 
 import javax.persistence.TypedQuery;
-import java.io.Console;
 import java.util.*;
 
 public class Startup {
@@ -29,61 +28,114 @@ public class Startup {
          *
          * 3. Give attributes to unicorns
          *
-         * 4. Tests
+         * xx. Tests
          *
          */
 
-        Session session = setupSessionConfiguration();
 
         try {
 
-            System.out.println("Welcome to the unicornigotchi! ");
-            System.out.println("Please make a selection ");
-            System.out.println("1. Create new unicorn ");
-            System.out.println("2. View existing one ");
-            System.out.print("Make selection : ");
-            Scanner scanner = new Scanner(System.in);
-            int menuSelection = scanner.nextInt();
-
-            switch (menuSelection){
-                case 1:
-                    System.out.println("----------------------");
-                    System.out.println("Creating new Unicorn");
-                    System.out.println("----------------------");
-
-                    session.beginTransaction();
-                    Unicorn newUnicorn = createNewUnicornFromUserInput();
-                    session.save(newUnicorn);
-                    session.getTransaction().commit();
-
-                    System.out.println("\\\n" +
-                            " \\ji\n" +
-                            " /.((( \n" +
-                            "(,/\"(((__,--.\n" +
-                            "    \\  ) _( /{ \n" +
-                            "    !|| \" :||      \n" +
-                            "    !||   :|| \n" +
-                            "    '''   ''' ");
-                    break;
-                case 2:
-                    //TODO VIEW EXISTING UNICORN
-                    break;
-            }
-            seeMenu(session);
+//            viewMainMenu();
+            Unicorn unicorn = AccessUnicorn.getAllUnicorns();
+            viewUnicornMenu(unicorn);
+            viewUpdateMenu(unicorn);
 
         } catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);
         }
-
-        session.close();
     }
 
-    private static void seeMenu(Session session) {
+    private static void viewMainMenu() {
+        System.out.println("Welcome to the Unicornigotchi! ");
+        System.out.println("Please make a selection ");
+        System.out.println("1. Create new unicorn ");
+        System.out.println("2. View existing one ");
+        System.out.print("Make selection : ");
+        Scanner scanner = new Scanner(System.in);
+        int menuSelection = scanner.nextInt();
+
+        switch (menuSelection) {
+            case 1:
+                System.out.println("----------------------");
+                System.out.println("Creating new Unicorn");
+                System.out.println("----------------------");
+
+
+                Unicorn newUnicorn = createNewUnicornFromUserInput();
+                AccessUnicorn.createUnicorn(newUnicorn);
+
+                System.out.println("\\\n" +
+                        " \\ji\n" +
+                        " /.((( \n" +
+                        "(,/\"(((__,--.\n" +
+                        "    \\  ) _( /{ \n" +
+                        "    !|| \" :||      \n" +
+                        "    !||   :|| \n" +
+                        "    '''   ''' ");
+                break;
+            case 2:
+                //TODO VIEW EXISTING UNICORN
+                break;
+        }
+    }
+
+    private static void viewUpdateMenu(Unicorn unicorn) {
+
+        ArrayList<Care.CareInformation> allCategoriesInNeed = unicorn.getCare().getAllCategoriesInNeed();
 
         System.out.println("----------------------");
-        System.out.println("1. Check Börjes status ");
-        System.out.println("2. See beautiful Börje ");
+        for (int i = 0; i < allCategoriesInNeed.size(); i++) {
+            System.out.println(i + ". " + allCategoriesInNeed.get(i));
+        }
+
+        System.out.print("Make selection : ");
+        Scanner in = new Scanner(System.in);
+        int selectedCategory = in.nextInt();
+        for (int i = 0; i < allCategoriesInNeed.size(); i++) {
+            if (selectedCategory == i) {
+                Care.CareInformation category = allCategoriesInNeed.get(i);
+                System.out.println("You selected " + category);
+                showAllSubCategories(category, i);
+                System.out.println("Select an option to make " + unicorn.getFirstName() + " happier!");
+                System.out.println("Please select : ");
+
+                Scanner subCategoryIndex = new Scanner(System.in);
+                int selectedSubCategory = subCategoryIndex.nextInt();
+                updateSubCategories(unicorn, category, selectedSubCategory);
+            }
+        }
+    }
+
+    private static void showAllSubCategories(Care.CareInformation unicornCareInformations, int categoryIndex) {
+
+        Set<Map.Entry<String, Boolean>> categories = unicornCareInformations.getCategory().entrySet();
+        for (Map.Entry<String, Boolean> subCategories : categories) {
+            String capitalizedWord = subCategories.getKey().substring(0, 1).toUpperCase() + subCategories.getKey().substring(1).toLowerCase();
+            System.out.println(categoryIndex + ". " + capitalizedWord + " : " + subCategories.getValue());
+        }
+    }
+
+    private static void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
+
+        int index = 0;
+        for (Map.Entry<String, Boolean> catergoryEntries : categoryToUpdate.getCategory().entrySet()) {
+            if (index == selectedCategory) {
+                categoryToUpdate.getCategory().put(catergoryEntries.getKey(), false);
+                categoryToUpdate.save(catergoryEntries.getKey());
+            }
+            index++;
+        }
+
+        AccessUnicorn.updateNeeds(unicorn);
+    }
+
+
+    private static void viewUnicornMenu(Unicorn unicorn) {
+
+        System.out.println("----------------------");
+        System.out.println("1. Check " + unicorn.getFirstName() + " status ");
+        System.out.println("2. See beautiful " + unicorn.getFirstName() + "  ");
         System.out.println("----------------------");
         System.out.print("Make selection : ");
         Scanner scanner = new Scanner(System.in);
@@ -91,8 +143,8 @@ public class Startup {
 
         switch (menuSelection) {
             case 1:
-                for (Map.Entry<String, Boolean> stringBooleanEntry : Needs.getAllUnicornNeeds(session).entrySet()) {
-                    System.out.println(stringBooleanEntry.getKey());
+                for (Care.CareInformation allCategoriesInNeed : unicorn.getCare().getAllCategoriesInNeed()) {
+                    System.out.println(allCategoriesInNeed.getCategory().entrySet());
                 }
                 break;
             case 2:
@@ -106,7 +158,7 @@ public class Startup {
                         "    '''   ''' ");
                 break;
         }
-        seeMenu(session);
+//        viewUnicornMenu();
     }
 
     private static Unicorn selectUnicorn(Session session) {
@@ -126,36 +178,25 @@ public class Startup {
 
     }
 
-    private static Session setupSessionConfiguration() {
-        return new Configuration().configure()
-                .addAnnotatedClass(UnicornClass.class)
-                .addAnnotatedClass(Care.class)
-                .addAnnotatedClass(Unicorn.class)
-                .addAnnotatedClass(Flush.class)
-                .addAnnotatedClass(Discipline.class)
-                .addAnnotatedClass(Play.class)
-                .buildSessionFactory().openSession();
-    }
-
     private static Unicorn createNewUnicornFromUserInput() {
-        Scanner userInput = new Scanner(System.in);
-
-        System.out.print("Enter unicorn firstname: ");
-        String firstName = userInput.next();
-
-        System.out.print("Enter unicorn lastname: ");
-        String lastName = userInput.next();
-
-        System.out.print("Enter unicorn thirdname: ");
-        String thirdName = userInput.next();
-
-        System.out.println(" A new Unicorn has been created, take good care of him!");
-        System.out.println(" Firstname : " + firstName);
-        System.out.println(" Lastname : " + lastName);
-        System.out.println(" Thirdname : " + thirdName);
-
-        return new Unicorn.UnicornBuilder(firstName, lastName, thirdName).build();
-//        return new Unicorn.UnicornBuilder("Börje", "Börjesson", "Bjorn").build();
+//        Scanner userInput = new Scanner(System.in);
+//
+//        System.out.print("Enter unicorn firstname: ");
+//        String firstName = userInput.next();
+//
+//        System.out.print("Enter unicorn lastname: ");
+//        String lastName = userInput.next();
+//
+//        System.out.print("Enter unicorn thirdname: ");
+//        String thirdName = userInput.next();
+//
+//        System.out.println(" A new Unicorn has been created, take good care of him!");
+//        System.out.println(" Firstname : " + firstName);
+//        System.out.println(" Lastname : " + lastName);
+//        System.out.println(" Thirdname : " + thirdName);
+//
+//        return new Unicorn.UnicornBuilder(firstName, lastName, thirdName).build();
+        return new Unicorn.UnicornBuilder("Börje", "Börjesson", "Bjorn").build();
     }
 
 //    private static void updateDisciplineStatus(Session session) {
