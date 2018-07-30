@@ -50,8 +50,7 @@ public class Care {
                 needs.remove(need);
             }
         }
-
-        return needs;
+        return needs; 
     }
 
     private Discipline getDiscipline() {
