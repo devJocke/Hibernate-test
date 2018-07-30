@@ -35,11 +35,9 @@ public class Care {
     }
 
     /**
-     * Returns everything that the Unicorn needs attention to
-     *
-     * @return A summarized map with all column names and their row values
+     * Sets all information about the unicorn
      */
-    public ArrayList<CareInformation> getAllCategoriesInNeed() {
+    public void loadAllNeeds() {
 
         needs.add(getDiscipline());
         needs.add(getPlay());
@@ -50,7 +48,10 @@ public class Care {
                 needs.remove(need);
             }
         }
-        return needs; 
+    }
+
+    public ArrayList<CareInformation> getNeeds() {
+        return needs;
     }
 
     private Discipline getDiscipline() {

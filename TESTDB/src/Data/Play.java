@@ -13,7 +13,7 @@ public class Play implements Care.CareInformation {
     private int id;
     private boolean bored = false;
     private boolean football = false;
-    
+
     @Transient
     private
     Map<String, Boolean> map = new HashMap<>();
@@ -46,10 +46,7 @@ public class Play implements Care.CareInformation {
 
     @Override
     public String toString() {
-        return "Play{" +
-                "bored=" + bored +
-                ", football=" + football +
-                '}';
+        return getClass().getSimpleName();
     }
 
     boolean isBored() {

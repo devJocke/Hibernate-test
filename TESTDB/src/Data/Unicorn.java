@@ -57,7 +57,7 @@ public class Unicorn {
         }
     }
 
-    private Unicorn() {
+    public Unicorn() {
     }
 
     public int getId() {

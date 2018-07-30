@@ -39,9 +39,7 @@ public class Discipline implements Care.CareInformation {
 
     @Override
     public String toString() {
-        return "Discipline{" +
-                "angry=" + angry +
-                '}';
+        return getClass().getSimpleName();
     }
 
     private int getId() {
