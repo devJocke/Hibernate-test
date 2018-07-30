@@ -20,3 +20,4 @@ $RECYCLE.BIN/
 
 # Generated files
 *.idea 
+*.out
