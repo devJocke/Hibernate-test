@@ -1,20 +1,47 @@
-package data;
+package Data;
 
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class Discipline {
- 
+public class Discipline implements Care.CareInformation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private boolean angry = false;
-    @Transient
-    private Map<String,Boolean> map= new HashMap<>();
 
     Discipline() {
+    }
+
+
+    @Transient
+    private
+    Map<String, Boolean> map = new HashMap<>();
+
+    @Override
+    public Map<String, Boolean> getCategory() {
+        if (!isAngry()) {
+            map.put("angry", isAngry());
+        }
+        return map;
+    }
+
+    @Override
+    public void save(String s) {
+        if (s.equals("angry")) {
+            map.put("angry", isAngry());
+            setAngry(true);
+        }
+    }
+
+
+    @Override
+    public String toString() {
+        return "Discipline{" +
+                "angry=" + angry +
+                '}';
     }
 
     private int getId() {
@@ -29,14 +56,8 @@ public class Discipline {
         return angry;
     }
 
-    private void setAngry(boolean angry) {
+    public void setAngry(boolean angry) {
         this.angry = angry;
     }
 
-    Map<String, Boolean> getNeeds() {
-        if (!isAngry()) {
-            map.put("Börje is angry", isAngry());
-        }
-        return map;
-    }
 }

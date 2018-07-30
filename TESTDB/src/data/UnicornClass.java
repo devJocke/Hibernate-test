@@ -1,4 +1,4 @@
-package data;
+package Data;
 
 import javax.persistence.*;
 import java.sql.Date;

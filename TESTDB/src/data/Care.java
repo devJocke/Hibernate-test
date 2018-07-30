@@ -1,13 +1,12 @@
-package data;
-
+package Data;
 
 import javax.persistence.*;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Entity
 @Table(name = "Care", schema = "dbo", catalog = "mobileRemoteDb")
-public class Care extends Needs {
+public class Care {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +25,7 @@ public class Care extends Needs {
     private Flush flush;
 
     @Transient
-    private Map<String, Boolean> needs = new HashMap<>();
+    private ArrayList<CareInformation> needs = new ArrayList<>();
 
 
     Care() {
@@ -35,7 +34,27 @@ public class Care extends Needs {
         setFlush(new Flush());
     }
 
-    public Discipline getDiscipline() {
+    /**
+     * Returns everything that the Unicorn needs attention to
+     *
+     * @return A summarized map with all column names and their row values
+     */
+    public ArrayList<CareInformation> getAllCategoriesInNeed() {
+
+        needs.add(getDiscipline());
+        needs.add(getPlay());
+//        needs.add(getFlush());
+
+        for (CareInformation need : needs) {
+            if (need.getCategory().isEmpty()) {
+                needs.remove(need);
+            }
+        }
+
+        return needs;
+    }
+
+    private Discipline getDiscipline() {
         return discipline;
     }
 
@@ -43,7 +62,7 @@ public class Care extends Needs {
         this.discipline = discipline;
     }
 
-    public Play getPlay() {
+    private Play getPlay() {
         return play;
     }
 
@@ -51,19 +70,12 @@ public class Care extends Needs {
         this.play = play;
     }
 
-    public Flush getFlush() {
+    private Flush getFlush() {
         return flush;
     }
 
     private void setFlush(Flush flush) {
         this.flush = flush;
-    }
-
-    Map<String, Boolean> getAllNeeds() {
-        needs.putAll(getPlay().getNeeds());
-        needs.putAll(getDiscipline().getNeeds());
-        needs.putAll(getFlush().getNeeds());
-        return needs;
     }
 
     public int getId() {
@@ -72,5 +84,17 @@ public class Care extends Needs {
 
     private void setId(int id) {
         this.id = id;
+    }
+
+    public interface CareInformation {
+        /**
+         * @return All subcategories in a category eg
+         * {@link Discipline}
+         * {@link Play}
+         * {@link Flush}
+         */
+        Map<String, Boolean> getCategory();
+
+        void save(String s);
     }
 }

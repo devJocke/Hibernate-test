@@ -1,5 +1,4 @@
-package data;
-
+package Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,7 +7,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Unicorn", schema = "dbo", catalog = "mobileRemoteDb")
-public class Unicorn  extends Needs {
+public class Unicorn {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +38,23 @@ public class Unicorn  extends Needs {
         this.thirdName = thirdName;
         Care care = new Care();
         setCare(care);
+    }
+
+    public static class UnicornBuilder {
+        private final String firstName;
+        private final String lastName;
+        private final String thirdName;
+        private int careId;
+
+        public UnicornBuilder(String firstName, String lastName, String thirdName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.thirdName = thirdName;
+        }
+
+        public Unicorn build() {
+            return new Unicorn(firstName, lastName, thirdName);
+        }
     }
 
     private Unicorn() {
@@ -86,23 +103,6 @@ public class Unicorn  extends Needs {
         this.unicornClasses = unicornClassList;
     }
 
-    public static class UnicornBuilder {
-        private final String firstName;
-        private final String lastName;
-        private final String thirdName;
-        private int careId;
-
-        public UnicornBuilder(String firstName, String lastName, String thirdName) {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.thirdName = thirdName;
-        }
-
-        public Unicorn build() {
-            return new Unicorn(firstName, lastName, thirdName);
-        }
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -122,7 +122,7 @@ public class Unicorn  extends Needs {
 
     @Override
     public String toString() {
-        return  firstName + ' ' +
+        return firstName + ' ' +
                 lastName + ' ' +
                 thirdName;
     }

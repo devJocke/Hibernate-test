@@ -1,4 +1,4 @@
-package data;
+package Data;
 
 
 import javax.persistence.*;
@@ -18,6 +18,14 @@ public class Flush {
     public Flush() {
     }
 
+
+     public Map<String, Boolean> getNeeds() {
+        if (!isToilet()) {
+            map.put("toilet", isToilet());
+        }
+        return map;
+    }
+
     public int getId() {
         return id;
     }
@@ -35,10 +43,4 @@ public class Flush {
         this.toilet = toilet;
     }
 
-    public Map<String, Boolean> getNeeds() {
-        if (!isToilet()) {
-            map.put("Börje needs to go to the toilet", isToilet());
-        }
-        return map;
-    }
 }

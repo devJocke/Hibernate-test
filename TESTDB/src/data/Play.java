@@ -1,4 +1,4 @@
-package data;
+package Data;
 
 
 import javax.persistence.*;
@@ -6,18 +6,50 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class Play {
+public class Play implements Care.CareInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private boolean bored = false;
-    @Transient
     private boolean football = false;
+    
     @Transient
-    private Map<String, Boolean> map = new HashMap<>();
+    private
+    Map<String, Boolean> map = new HashMap<>();
 
     Play() {
+    }
+
+    @Override
+    public Map<String, Boolean> getCategory() {
+        if (!isBored()) {
+            map.put("bored", isBored());
+        }
+        if (!isFootball()) {
+            map.put("football", isFootball());
+        }
+        return map;
+    }
+
+    @Override
+    public void save(String s) {
+        if (s.equals("bored")) {
+            map.put("bored", isBored());
+            setBored(true);
+        }
+        if (s.equals("football")) {
+            map.put("football", isBored());
+            setFootball(true);
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Play{" +
+                "bored=" + bored +
+                ", football=" + football +
+                '}';
     }
 
     boolean isBored() {
@@ -44,13 +76,4 @@ public class Play {
         this.football = football;
     }
 
-    Map<String, Boolean> getNeeds() {
-        if (!isBored()) {
-            map.put("Börje is bored", isBored());
-        }
-        if (!isFootball()) {
-            map.put("Börje wants to play football", isFootball());
-        }
-        return map;
-    }
 }
