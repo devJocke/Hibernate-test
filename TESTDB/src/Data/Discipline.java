@@ -12,16 +12,16 @@ public class Discipline implements Care.CareInformation {
     private int id;
     private boolean angry = false;
 
-    Discipline() {
-    }
-
-
     @Transient
     private
     Map<String, Boolean> map = new HashMap<>();
 
+    Discipline() {
+        map.put("angry", false);
+    }
+
     @Override
-    public Map<String, Boolean> getCategory() {
+    public Map<String, Boolean> getCategories() {
         if (!isAngry()) {
             map.put("angry", isAngry());
         }
@@ -31,8 +31,8 @@ public class Discipline implements Care.CareInformation {
     @Override
     public void save(String s) {
         if (s.equals("angry")) {
-            map.put("angry", isAngry());
             setAngry(true);
+            map.remove("angry");
         }
     }
 

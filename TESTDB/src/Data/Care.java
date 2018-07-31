@@ -2,6 +2,8 @@ package Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 @Entity
@@ -25,7 +27,7 @@ public class Care {
     private Flush flush;
 
     @Transient
-    private ArrayList<CareInformation> needs = new ArrayList<>();
+    private List<CareInformation> needs = new ArrayList<>();
 
 
     Care() {
@@ -38,19 +40,21 @@ public class Care {
      * Sets all information about the unicorn
      */
     public void loadAllNeeds() {
-
-        needs.add(getDiscipline());
         needs.add(getPlay());
-//        needs.add(getFlush());
+        needs.add(getDiscipline());
 
-        for (CareInformation need : needs) {
-            if (need.getCategory().isEmpty()) {
-                needs.remove(need);
-            }
-        }
+        needs.removeIf(careInformation -> careInformation.getCategories().isEmpty());
     }
 
-    public ArrayList<CareInformation> getNeeds() {
+    /**
+     * Clears all categories that has been fully attended
+     * Example if both {@link Play#isBored() && {@link Play#isFootball()}} is done we dont want to see them.
+     */
+    public void clearAllEmptyNeeds() {
+        needs.removeIf(careInformation -> careInformation.getCategories().isEmpty());
+    }
+
+    public List<CareInformation> getNeeds() {
         return needs;
     }
 
@@ -86,6 +90,15 @@ public class Care {
         this.id = id;
     }
 
+     Care newUnicorn() {
+        setDiscipline(new Discipline());
+        setPlay(new Play());
+        setFlush(new Flush());
+        needs.add(getPlay());
+        needs.add(getDiscipline());
+        return this;
+    }
+
     public interface CareInformation {
         /**
          * @return All subcategories in a category eg
@@ -93,7 +106,7 @@ public class Care {
          * {@link Play}
          * {@link Flush}
          */
-        Map<String, Boolean> getCategory();
+        Map<String, Boolean> getCategories();
 
         void save(String s);
     }

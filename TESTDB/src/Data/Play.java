@@ -1,6 +1,5 @@
 package Data;
 
-
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +18,12 @@ public class Play implements Care.CareInformation {
     Map<String, Boolean> map = new HashMap<>();
 
     Play() {
+        map.put("bored", false);
+        map.put("football", false);
     }
 
     @Override
-    public Map<String, Boolean> getCategory() {
+    public Map<String, Boolean> getCategories() {
         if (!isBored()) {
             map.put("bored", isBored());
         }
@@ -35,12 +36,12 @@ public class Play implements Care.CareInformation {
     @Override
     public void save(String s) {
         if (s.equals("bored")) {
-            map.put("bored", isBored());
             setBored(true);
+            map.remove("bored");
         }
         if (s.equals("football")) {
-            map.put("football", isBored());
             setFootball(true);
+            map.remove("football");
         }
     }
 

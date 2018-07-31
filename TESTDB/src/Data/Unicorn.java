@@ -36,7 +36,7 @@ public class Unicorn {
         this.firstName = firstName;
         this.lastName = lastName;
         this.thirdName = thirdName;
-        Care care = new Care();
+        Care care = new Care().newUnicorn();
         setCare(care);
     }
 

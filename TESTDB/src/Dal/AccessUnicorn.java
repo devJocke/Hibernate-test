@@ -37,7 +37,7 @@ public class AccessUnicorn {
             TypedQuery<Unicorn> unicornTypedQuery = session.createNativeQuery("select * from Unicorn", Unicorn.class);
             unicorn = unicornTypedQuery.getSingleResult();
             unicorn.getCare().loadAllNeeds();
-
+            session.getTransaction().commit();
             return unicorn;
         } catch (NoResultException e) {
         }
@@ -48,6 +48,9 @@ public class AccessUnicorn {
     public static Unicorn getUnicorn(int unicornId) {
 
         session.beginTransaction();
+        TypedQuery<Unicorn> unicornTypedQuery = session.createNativeQuery("select * from Unicorn where id = (?1)", Unicorn.class);
+        unicornTypedQuery.setParameter(1, unicornId);
+        unicorn = unicornTypedQuery.getSingleResult();
         session.getTransaction().commit();
         return unicorn;
     }
