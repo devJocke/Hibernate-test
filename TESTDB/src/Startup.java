@@ -151,7 +151,7 @@ public class Startup {
 
         try {
             Scanner userInput = new Scanner(System.in);
-
+// TODO : GET COLUMNS PROPMPT NAME FROM ALL OF THEM INSTEAD OF HARDCODING
             System.out.print("Enter unicorn firstname: ");
             String firstName = userInput.next();
             String upperCaseFirstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
@@ -223,7 +223,7 @@ public class Startup {
 
     private static void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
 
-        int index = 0; 
+        int index = 0;
         for (Map.Entry<String, Boolean> catergoryEntries : categoryToUpdate.getCategories().entrySet()) {
 
             if (index == selectedCategory) {
