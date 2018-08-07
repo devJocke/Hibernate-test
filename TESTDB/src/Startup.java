@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Startup {
 
+
     public static void main(String[] args) {
 
 
@@ -31,28 +32,25 @@ public class Startup {
          * xx. Tests
          *
          */
-
-
+        Startup startup = new Startup();
         try {
             Unicorn unicorn = AccessUnicorn.preLoadUnicorns();
             if (unicorn.getFirstName() != null) {
-                viewMainMenu(unicorn);
+                startup.viewMainMenu(unicorn);
             } else {
                 System.out.println("No unicorn found lets create a new one");
-                Unicorn newUnicorn = createNewUnicornFromUserInput();
+                Unicorn newUnicorn = startup.createNewUnicornFromUserInput();
                 AccessUnicorn.createUnicorn(newUnicorn);
-                viewMainMenu(newUnicorn);
+                startup.viewMainMenu(newUnicorn);
                 //FETCH CREATED  DATA
             }
-
-
         } catch (Throwable ex) {
             System.err.println("Failed to create sessionFactory object." + ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
 
-    private static void viewMainMenu(Unicorn unicorn) {
+    private void viewMainMenu(Unicorn unicorn) {
         System.out.println("Welcome to the Unicornigotchi! ");
         System.out.println("Please make a selection ");
         System.out.println("1. Create new unicorn - DONT DO THIS YET");
@@ -99,7 +97,7 @@ public class Startup {
     }
 
 
-    private static void viewUnicornMenu(Unicorn unicorn) {
+    private void viewUnicornMenu(Unicorn unicorn) {
 
         AccessUnicorn.checkForUpdatedData(unicorn);
 
@@ -151,7 +149,7 @@ public class Startup {
         }
     }
 
-    private static Unicorn createNewUnicornFromUserInput() {
+    private Unicorn createNewUnicornFromUserInput() {
 
         try {
             Scanner userInput = new Scanner(System.in);
@@ -175,8 +173,12 @@ public class Startup {
         return new Unicorn();
     }
 
-
-    private static void viewUpdateMenu(Unicorn unicorn) {
+    /**
+     * Displays and handles all the input from the user
+     *
+     * @param unicorn to be used
+     */
+    private void viewUpdateMenu(Unicorn unicorn) {
 
         //MUST BE FALSE
         AccessUnicorn.checkForUpdatedData(unicorn);
@@ -199,22 +201,8 @@ public class Startup {
             }
             Care.CareInformation category = allCategoriesInNeed.get(selectedCategory);
             System.out.println("You selected " + category);
+            selectSubCategory(unicorn, allCategoriesInNeed.get(selectedCategory));
 
-            //DISPLAY ALL SUB CATEGORIES
-            System.out.println("0. Go back");
-            showAllSubCategories(category);
-            System.out.println("Select an option to make " + unicorn.getFirstName() + " happier!");
-            System.out.print("Please select : ");
-
-            Scanner subCategoryIndex = new Scanner(System.in);
-            int selectedSubCategory = subCategoryIndex.nextInt() - 1;
-            if (isCollectionOutsideCategoryRange(selectedSubCategory, allCategoriesInNeed.size())) {
-                viewUpdateMenu(unicorn);
-                return;
-            } else if (selectedSubCategory <= category.getCategories().size()) {
-                AccessUnicorn.checkForUpdatedData(unicorn);
-                updateSubCategories(unicorn, category, selectedSubCategory);
-            }
         } catch (InputMismatchException imp) {
             System.err.println("Invalid input provided, use numerics only 1-9");
             viewUpdateMenu(unicorn);
@@ -222,11 +210,28 @@ public class Startup {
         viewUnicornMenu(unicorn);
     }
 
-    private static boolean isCollectionOutsideCategoryRange(int selectedCategory, int size) {
+    private boolean isCollectionOutsideCategoryRange(int selectedCategory, int size) {
         return selectedCategory < 0 || selectedCategory >= size;
     }
 
-    private static void showAllSubCategories(Care.CareInformation unicornCareInformations) {
+    private void selectSubCategory(Unicorn unicorn, Care.CareInformation careInformation) {
+        //DISPLAY ALL SUB CATEGORIES
+        System.out.println("0. Go back");
+        showAllSubCategories(careInformation);
+        System.out.println("Select an option to make " + unicorn.getFirstName() + " happier!");
+        System.out.print("Please select : ");
+
+        Scanner subCategoryIndex = new Scanner(System.in);
+        int selectedSubCategory = subCategoryIndex.nextInt() - 1;
+        if (isCollectionOutsideCategoryRange(selectedSubCategory, careInformation.getCategories().size())) {
+            viewUpdateMenu(unicorn);
+        } else if (selectedSubCategory <= careInformation.getCategories().size()) {
+            AccessUnicorn.checkForUpdatedData(unicorn);
+            updateSubCategories(unicorn, careInformation, selectedSubCategory);
+        }
+    }
+
+    private void showAllSubCategories(Care.CareInformation unicornCareInformations) {
         int index = 0;
         Set<Map.Entry<String, Boolean>> categories = unicornCareInformations.getCategories().entrySet();
         for (Map.Entry<String, Boolean> subCategories : categories) {
@@ -236,7 +241,7 @@ public class Startup {
         }
     }
 
-    private static void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
+    private void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
 
         String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.getCategories(), selectedCategory));
 
@@ -246,11 +251,11 @@ public class Startup {
         AccessUnicorn.updateUnicornNeeds(unicorn);
     }
 
-    private static String getElementByIndex(LinkedHashMap map, int index) {
+    private String getElementByIndex(LinkedHashMap map, int index) {
         return ((Map.Entry<String, Boolean>) map.entrySet().toArray()[index]).getKey();
     }
 
-    private static Unicorn selectUnicorn(Session session) {
+    private Unicorn selectUnicorn(Session session) {
         TypedQuery<Unicorn> unicornsTypedQuery = session.createNativeQuery("select * from Unicorn", Unicorn.class);
         System.out.println("Choose a unicorn by entering its number ");
         for (Unicorn unicorn : unicornsTypedQuery.getResultList()) {
