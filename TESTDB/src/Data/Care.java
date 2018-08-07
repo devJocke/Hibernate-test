@@ -54,7 +54,7 @@ public class Care {
 
     /**
      * Clears all categories that has been fully attended
-     * Example if both {@link Play#isBored() && {@link Play#isFootball()}} is done we dont want to see them.
+     * Example if both {@link Play#isHockey()} () && {@link Play#isFootball()}} is done we dont want to see them.
      */
     public void clearAllEmptyNeeds() {
         needs.removeIf(careInformation -> careInformation.getCategories().isEmpty());
