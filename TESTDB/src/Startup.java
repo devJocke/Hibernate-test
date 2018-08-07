@@ -1,6 +1,5 @@
 import Dal.AccessUnicorn;
 import Data.Care;
-import Data.Play;
 import Data.Unicorn;
 import org.hibernate.*;
 
@@ -62,7 +61,7 @@ public class Startup {
         try {
             Scanner scanner = new Scanner(System.in);
             int menuSelection = scanner.nextInt();
-            if (menuSelection < 3) {
+            if (menuSelection > 0 && menuSelection < 3) {
                 switch (menuSelection) {
                     case 1:
                         System.out.println("----------------------");
@@ -102,6 +101,8 @@ public class Startup {
 
     private static void viewUnicornMenu(Unicorn unicorn) {
 
+        AccessUnicorn.checkForUpdatedData(unicorn);
+
         if (unicorn.getCare().getNeeds().isEmpty()) {
             System.out.println("Nothing needs to be done, check back later");
             viewMainMenu(unicorn);
@@ -109,6 +110,7 @@ public class Startup {
         }
 
         System.out.println("-------- UNICORN MENU ----------");
+        System.out.println("0. Main menu");
         System.out.println("1. Check " + unicorn.getFirstName() + " status ");
         System.out.println("2. See beautiful " + unicorn.getFirstName());
         System.out.println("3. Update " + unicorn.getFirstName());
@@ -119,7 +121,7 @@ public class Startup {
             Scanner scanner = new Scanner(System.in);
             int menuSelection = scanner.nextInt();
 
-            if (menuSelection < 4) {
+            if (menuSelection > 0 && menuSelection < 4) {
                 switch (menuSelection) {
                     case 1:
                         System.out.println(unicorn.getFirstName() + " needs some attention");
@@ -139,6 +141,8 @@ public class Startup {
                         viewUpdateMenu(unicorn);
                         return;
                 }
+            } else {
+                viewMainMenu(unicorn);
             }
             viewUnicornMenu(unicorn);
         } catch (InputMismatchException imp) {
@@ -174,35 +178,42 @@ public class Startup {
 
     private static void viewUpdateMenu(Unicorn unicorn) {
 
+        //MUST BE FALSE
+        AccessUnicorn.checkForUpdatedData(unicorn);
+
         List<Care.CareInformation> allCategoriesInNeed = unicorn.getCare().getNeeds();
 
         System.out.println("--------UPDATE MENU-----------");
+        System.out.println("0. Go back");
         for (int i = 0; i < allCategoriesInNeed.size(); i++) {
-            System.out.println(i + ". " + allCategoriesInNeed.get(i));
+            System.out.println(i + 1 + ". " + allCategoriesInNeed.get(i));
         }
 
-        System.out.print("Make selection : ");
-
         try {
+            System.out.print("Make selection : ");
             Scanner in = new Scanner(System.in);
-            int selectedCategory = in.nextInt();
-            if (selectedCategory < allCategoriesInNeed.size()) {
-                for (int i = 0; i < allCategoriesInNeed.size(); i++) {
-                    if (selectedCategory == i) {
-                        Care.CareInformation category = allCategoriesInNeed.get(i);
-                        System.out.println("You selected " + category);
-                        //DISPLAY ALL SUB CATEGORIES
-                        showAllSubCategories(category);
-                        System.out.println("Select an option to make " + unicorn.getFirstName() + " happier!");
-                        System.out.print("Please select : ");
+            int selectedCategory = in.nextInt() - 1;
+            if (isCollectionOutsideCategoryRange(selectedCategory, allCategoriesInNeed.size())) {
+                viewUnicornMenu(unicorn);
+                return;
+            }
+            Care.CareInformation category = allCategoriesInNeed.get(selectedCategory);
+            System.out.println("You selected " + category);
 
-                        Scanner subCategoryIndex = new Scanner(System.in);
-                        int selectedSubCategory = subCategoryIndex.nextInt();
-                        updateSubCategories(unicorn, category, selectedSubCategory);
-                    }
-                }
-            } else {
+            //DISPLAY ALL SUB CATEGORIES
+            System.out.println("0. Go back");
+            showAllSubCategories(category);
+            System.out.println("Select an option to make " + unicorn.getFirstName() + " happier!");
+            System.out.print("Please select : ");
+
+            Scanner subCategoryIndex = new Scanner(System.in);
+            int selectedSubCategory = subCategoryIndex.nextInt() - 1;
+            if (isCollectionOutsideCategoryRange(selectedSubCategory, allCategoriesInNeed.size())) {
                 viewUpdateMenu(unicorn);
+                return;
+            } else if (selectedSubCategory <= category.getCategories().size()) {
+                AccessUnicorn.checkForUpdatedData(unicorn);
+                updateSubCategories(unicorn, category, selectedSubCategory);
             }
         } catch (InputMismatchException imp) {
             System.err.println("Invalid input provided, use numerics only 1-9");
@@ -211,38 +222,33 @@ public class Startup {
         viewUnicornMenu(unicorn);
     }
 
+    private static boolean isCollectionOutsideCategoryRange(int selectedCategory, int size) {
+        return selectedCategory < 0 || selectedCategory >= size;
+    }
+
     private static void showAllSubCategories(Care.CareInformation unicornCareInformations) {
         int index = 0;
         Set<Map.Entry<String, Boolean>> categories = unicornCareInformations.getCategories().entrySet();
         for (Map.Entry<String, Boolean> subCategories : categories) {
             String capitalizedWord = subCategories.getKey().substring(0, 1).toUpperCase() + subCategories.getKey().substring(1).toLowerCase();
-            System.out.println(index + ". " + capitalizedWord);
+            System.out.println(index + 1 + ". " + capitalizedWord);
             index++;
         }
     }
 
     private static void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
 
-        int index = 0;
-        for (Map.Entry<String, Boolean> catergoryEntries : categoryToUpdate.getCategories().entrySet()) {
+        String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.getCategories(), selectedCategory));
 
-            if (index == selectedCategory) {
-                categoryToUpdate.save(catergoryEntries.getKey());
-                /**
-                 * {@link Care.CareInformation#getCategories()}
-                 * Example {@link Play#getCategories()}
-                 * Prevents concurrencyexception since we update the category for the selected property
-                 */
-
-                break;
-            }
-            index++;
-        }
-
+        System.out.println("----------------------");
+        System.out.println("----------------------");
+        System.out.println(unicorn.getFirstName() + " is no longer " + key);
         AccessUnicorn.updateUnicornNeeds(unicorn);
-        unicorn.getCare().clearAllEmptyNeeds();
     }
 
+    private static String getElementByIndex(LinkedHashMap map, int index) {
+        return ((Map.Entry<String, Boolean>) map.entrySet().toArray()[index]).getKey();
+    }
 
     private static Unicorn selectUnicorn(Session session) {
         TypedQuery<Unicorn> unicornsTypedQuery = session.createNativeQuery("select * from Unicorn", Unicorn.class);

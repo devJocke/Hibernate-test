@@ -60,4 +60,12 @@ public class AccessUnicorn {
         session.saveOrUpdate(unicorn);
         session.getTransaction().commit();
     }
+
+    public static void checkForUpdatedData(Unicorn unicorn) {
+
+        session.beginTransaction();
+        session.refresh(unicorn);
+        session.getTransaction().commit();
+        unicorn.getCare().loadAllNeeds();
+    }
 }

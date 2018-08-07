@@ -1,7 +1,10 @@
 package Data;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Entity
@@ -15,15 +18,19 @@ public class Play implements Care.CareInformation {
 
     @Transient
     private
-    Map<String, Boolean> map = new HashMap<>();
+    LinkedHashMap<String, Boolean> map = new LinkedHashMap<>();
 
     Play() {
+    }
+
+    Play NewUnicorn() {
         map.put("bored", false);
         map.put("football", false);
+        return this;
     }
 
     @Override
-    public Map<String, Boolean> getCategories() {
+    public LinkedHashMap<String, Boolean> getCategories() {
         if (!isBored()) {
             map.put("bored", isBored());
         }
@@ -34,15 +41,16 @@ public class Play implements Care.CareInformation {
     }
 
     @Override
-    public void save(String s) {
-        if (s.equals("bored")) {
+    public String save(String key) {
+        if (key.equals("bored")) {
             setBored(true);
             map.remove("bored");
         }
-        if (s.equals("football")) {
+        if (key.equals("football")) {
             setFootball(true);
             map.remove("football");
         }
+        return key;
     }
 
     @Override

@@ -2,6 +2,7 @@ package Data;
 
 import javax.persistence.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Entity
@@ -14,14 +15,17 @@ public class Discipline implements Care.CareInformation {
 
     @Transient
     private
-    Map<String, Boolean> map = new HashMap<>();
+    LinkedHashMap<String, Boolean> map = new LinkedHashMap<>();
 
-    Discipline() {
+    Discipline() {  }
+
+   Discipline NewUnicorn() {
         map.put("angry", false);
+        return this;
     }
 
     @Override
-    public Map<String, Boolean> getCategories() {
+    public LinkedHashMap<String, Boolean> getCategories() {
         if (!isAngry()) {
             map.put("angry", isAngry());
         }
@@ -29,11 +33,12 @@ public class Discipline implements Care.CareInformation {
     }
 
     @Override
-    public void save(String s) {
-        if (s.equals("angry")) {
+    public String save(String key) {
+        if (key.equals("angry")) {
             setAngry(true);
             map.remove("angry");
         }
+        return key;
     }
 
 

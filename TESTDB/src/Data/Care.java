@@ -2,9 +2,8 @@ package Data;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "Care", schema = "dbo", catalog = "mobileRemoteDb")
@@ -40,11 +39,18 @@ public class Care {
      * Sets all information about the unicorn
      */
     public void loadAllNeeds() {
-        needs.add(getPlay());
-        needs.add(getDiscipline());
+
+        if(!needs.contains(getPlay())){
+            needs.add(getPlay());
+        }
+
+        if(!needs.contains(getDiscipline())){
+            needs.add(getDiscipline());
+        }
 
         needs.removeIf(careInformation -> careInformation.getCategories().isEmpty());
     }
+
 
     /**
      * Clears all categories that has been fully attended
@@ -91,9 +97,9 @@ public class Care {
     }
 
      Care newUnicorn() {
-        setDiscipline(new Discipline());
-        setPlay(new Play());
-        setFlush(new Flush());
+        setDiscipline(new Discipline().NewUnicorn());
+        setPlay(new Play().NewUnicorn());
+        //setFlush(new Flush());
         needs.add(getPlay());
         needs.add(getDiscipline());
         return this;
@@ -106,8 +112,8 @@ public class Care {
          * {@link Play}
          * {@link Flush}
          */
-        Map<String, Boolean> getCategories();
+        LinkedHashMap<String, Boolean>  getCategories();
 
-        void save(String s);
+        String save(String s);
     }
 }
