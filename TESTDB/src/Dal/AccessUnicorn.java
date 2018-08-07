@@ -17,7 +17,7 @@ public class AccessUnicorn {
                 .addAnnotatedClass(UnicornClass.class)
                 .addAnnotatedClass(Care.class)
                 .addAnnotatedClass(Unicorn.class)
-                .addAnnotatedClass(Flush.class)
+                .addAnnotatedClass(Toilet.class)
                 .addAnnotatedClass(Discipline.class)
                 .addAnnotatedClass(Play.class)
                 .buildSessionFactory().openSession();

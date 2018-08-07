@@ -17,8 +17,7 @@ public class Play implements Care.CareInformation {
     private boolean football = false;
 
     @Transient
-    private
-    LinkedHashMap<String, Boolean> map = new LinkedHashMap<>();
+    private LinkedHashMap<String, Boolean> map = new LinkedHashMap<>();
 
     Play() {
     }
@@ -44,11 +43,11 @@ public class Play implements Care.CareInformation {
     public String save(String key) {
         if (key.equals("hockey")) {
             setHockey(true);
-            map.remove("hockey");
+            map.remove(key);
         }
         if (key.equals("football")) {
             setFootball(true);
-            map.remove("football");
+            map.remove(key);
         }
         return "enjoyed playing " + key;
     }

@@ -23,7 +23,7 @@ public class Care {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "flushId")
-    private Flush flush;
+    private Toilet toilet;
 
     @Transient
     private List<CareInformation> needs = new ArrayList<>();
@@ -32,7 +32,7 @@ public class Care {
     Care() {
         setDiscipline(new Discipline());
         setPlay(new Play());
-        setFlush(new Flush());
+        setToilet(new Toilet());
     }
 
     /**
@@ -40,23 +40,16 @@ public class Care {
      */
     public void loadAllNeeds() {
 
-        if(!needs.contains(getPlay())){
+        if (!needs.contains(getPlay())) {
             needs.add(getPlay());
         }
 
-        if(!needs.contains(getDiscipline())){
+        if (!needs.contains(getDiscipline())) {
             needs.add(getDiscipline());
         }
-
-        needs.removeIf(careInformation -> careInformation.getCategories().isEmpty());
-    }
-
-
-    /**
-     * Clears all categories that has been fully attended
-     * Example if both {@link Play#isHockey()} () && {@link Play#isFootball()}} is done we dont want to see them.
-     */
-    public void clearAllEmptyNeeds() {
+        if (!needs.contains(getToilet())) {
+            needs.add(getToilet());
+        }
         needs.removeIf(careInformation -> careInformation.getCategories().isEmpty());
     }
 
@@ -80,12 +73,12 @@ public class Care {
         this.play = play;
     }
 
-    private Flush getFlush() {
-        return flush;
+    private Toilet getToilet() {
+        return toilet;
     }
 
-    private void setFlush(Flush flush) {
-        this.flush = flush;
+    private void setToilet(Toilet toilet) {
+        this.toilet = toilet;
     }
 
     public int getId() {
@@ -96,12 +89,13 @@ public class Care {
         this.id = id;
     }
 
-     Care newUnicorn() {
+    Care newUnicorn() {
         setDiscipline(new Discipline().NewUnicorn());
         setPlay(new Play().NewUnicorn());
-        //setFlush(new Flush());
+        setToilet(new Toilet().NewUnicorn());
         needs.add(getPlay());
         needs.add(getDiscipline());
+        needs.add(getToilet());
         return this;
     }
 
@@ -110,10 +104,10 @@ public class Care {
          * @return All subcategories in a category eg
          * {@link Discipline}
          * {@link Play}
-         * {@link Flush}
+         * {@link Toilet}
          */
-        LinkedHashMap<String, Boolean>  getCategories();
+        LinkedHashMap<String, Boolean> getCategories();
 
-        String save(String s);
+        String save(String key);
     }
 }

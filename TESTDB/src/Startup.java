@@ -16,7 +16,7 @@ public class Startup {
          * 1. First time start, create new unicorn
          * Check - Ask for Unicorn properties fname(not null),lname,tname
          * Check - Tell user that she needs to attend the unicorn and do the following
-         * Play, Discipline, Flush
+         * Play, Discipline, Toilet
          *
          * Check - -- New unicorn -> Care -> disc, play, flush
          * IMPROVE -- unicorn.getcare() -> Fetch all and check which values that are 0

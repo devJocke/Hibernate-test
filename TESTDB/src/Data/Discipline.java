@@ -37,7 +37,7 @@ public class Discipline implements Care.CareInformation {
     public String save(String key) {
         if (key.equals("angry")) {
             setAngry(true);
-            map.remove("angry");
+            map.remove(key);
         }
         return "is no longer " + key;
     }
