@@ -17,9 +17,10 @@ public class Discipline implements Care.CareInformation {
     private
     LinkedHashMap<String, Boolean> map = new LinkedHashMap<>();
 
-    Discipline() {  }
+    Discipline() {
+    }
 
-   Discipline NewUnicorn() {
+    Discipline NewUnicorn() {
         map.put("angry", false);
         return this;
     }
@@ -38,7 +39,7 @@ public class Discipline implements Care.CareInformation {
             setAngry(true);
             map.remove("angry");
         }
-        return key;
+        return "is no longer " + key;
     }
 
 

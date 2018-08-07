@@ -13,7 +13,7 @@ public class Play implements Care.CareInformation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private boolean bored = false;
+    private boolean hockey = false;
     private boolean football = false;
 
     @Transient
@@ -24,15 +24,15 @@ public class Play implements Care.CareInformation {
     }
 
     Play NewUnicorn() {
-        map.put("bored", false);
+        map.put("hockey", false);
         map.put("football", false);
         return this;
     }
 
     @Override
     public LinkedHashMap<String, Boolean> getCategories() {
-        if (!isBored()) {
-            map.put("bored", isBored());
+        if (!isHockey()) {
+            map.put("hockey", isHockey());
         }
         if (!isFootball()) {
             map.put("football", isFootball());
@@ -42,15 +42,15 @@ public class Play implements Care.CareInformation {
 
     @Override
     public String save(String key) {
-        if (key.equals("bored")) {
-            setBored(true);
-            map.remove("bored");
+        if (key.equals("hockey")) {
+            setHockey(true);
+            map.remove("hockey");
         }
         if (key.equals("football")) {
             setFootball(true);
             map.remove("football");
         }
-        return key;
+        return "enjoyed playing " + key;
     }
 
     @Override
@@ -58,12 +58,12 @@ public class Play implements Care.CareInformation {
         return getClass().getSimpleName();
     }
 
-    boolean isBored() {
-        return bored;
+    boolean isHockey() {
+        return hockey;
     }
 
-    private void setBored(boolean bored) {
-        this.bored = bored;
+    private void setHockey(boolean hockey) {
+        this.hockey = hockey;
     }
 
     public int getId() {

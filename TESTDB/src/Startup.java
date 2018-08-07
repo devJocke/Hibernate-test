@@ -247,11 +247,11 @@ public class Startup {
 
         System.out.println("----------------------");
         System.out.println("----------------------");
-        System.out.println(unicorn.getFirstName() + " is no longer " + key);
+        System.out.println(unicorn.getFirstName() + " " + key);
         AccessUnicorn.updateUnicornNeeds(unicorn);
     }
 
-    private String getElementByIndex(LinkedHashMap map, int index) {
+    private String getElementByIndex(Map<String, Boolean> map, int index) {
         return ((Map.Entry<String, Boolean>) map.entrySet().toArray()[index]).getKey();
     }
 
