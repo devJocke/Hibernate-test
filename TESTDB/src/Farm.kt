@@ -1,0 +1,7 @@
+
+class Farm{
+
+    fun initializeFarming(){
+
+    }
+}

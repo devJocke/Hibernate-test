@@ -13,7 +13,7 @@ public class Startup {
 
 
         /**
-         * 1. First time start, create new unicorn
+         * 0. First time start, create new unicorn
          * Check - Ask for Unicorn properties fname(not null),lname,tname
          * Check - Tell user that she needs to attend the unicorn and do the following
          * Play, Discipline, Toilet
@@ -22,12 +22,22 @@ public class Startup {
          * IMPROVE -- unicorn.getcare() -> Fetch all and check which values that are 0
          *
          *
-         * 2. Second start, unicorn is already created
+         * 1. Second start, unicorn is already created
          * Do a getCheck to see if any values are 0
          * --> Update attended property and somehow set a timer that will change the value to 0 <--
-         *     ^Allow the user to take care of the unicorn, display ui for each need^
+         *        ^Allow the user to take care of the unicorn, display ui for each need^
          *
-         * 3. Give attributes to unicorns
+         * 2. Give attributes to unicorns
+         * 3. Have a farm with actual minigames
+         * 3.1 Fishingschack - Fish - Clean up?
+         * 3.2 Pet battles?
+         * 3.3 Cleaning?
+         *
+         * ----------------
+         * 4. Give attributes to unicorns
+         * 5  Levelup?
+         * 6. Enemies?
+         * 7. Recruit?
          *
          * xx. Tests
          *
@@ -153,7 +163,7 @@ public class Startup {
 
         try {
             Scanner userInput = new Scanner(System.in);
-// TODO : GET COLUMNS PROPMPT NAME FROM ALL OF THEM INSTEAD OF HARDCODING
+            // TODO : GET COLUMNS PROPMPT NAME FROM ALL OF THEM INSTEAD OF HARDCODING
             System.out.print("Enter unicorn firstname: ");
             String firstName = userInput.next();
             String upperCaseFirstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
@@ -210,10 +220,6 @@ public class Startup {
         viewUnicornMenu(unicorn);
     }
 
-    private boolean isCollectionOutsideCategoryRange(int selectedCategory, int size) {
-        return selectedCategory < 0 || selectedCategory >= size;
-    }
-
     private void selectSubCategory(Unicorn unicorn, Care.CareInformation careInformation) {
         //DISPLAY ALL SUB CATEGORIES
         System.out.println("0. Go back");
@@ -223,9 +229,9 @@ public class Startup {
 
         Scanner subCategoryIndex = new Scanner(System.in);
         int selectedSubCategory = subCategoryIndex.nextInt() - 1;
-        if (isCollectionOutsideCategoryRange(selectedSubCategory, careInformation.getCategories().size())) {
+        if (isCollectionOutsideCategoryRange(selectedSubCategory, careInformation.categories().size())) {
             viewUpdateMenu(unicorn);
-        } else if (selectedSubCategory <= careInformation.getCategories().size()) {
+        } else if (selectedSubCategory <= careInformation.categories().size()) {
             AccessUnicorn.checkForUpdatedData(unicorn);
             updateSubCategories(unicorn, careInformation, selectedSubCategory);
         }
@@ -233,7 +239,7 @@ public class Startup {
 
     private void showAllSubCategories(Care.CareInformation unicornCareInformations) {
         int index = 0;
-        Set<Map.Entry<String, Boolean>> categories = unicornCareInformations.getCategories().entrySet();
+        Set<Map.Entry<String, Boolean>> categories = unicornCareInformations.categories().entrySet();
         for (Map.Entry<String, Boolean> subCategories : categories) {
             String capitalizedWord = subCategories.getKey().substring(0, 1).toUpperCase() + subCategories.getKey().substring(1).toLowerCase();
             System.out.println(index + 1 + ". " + capitalizedWord);
@@ -241,10 +247,13 @@ public class Startup {
         }
     }
 
+    private boolean isCollectionOutsideCategoryRange(int selectedCategory, int size) {
+        return selectedCategory < 0 || selectedCategory >= size;
+    }
+
     private void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
 
-        String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.getCategories(), selectedCategory));
-
+        String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.categories(), selectedCategory));
         System.out.println("----------------------");
         System.out.println("----------------------");
         System.out.println(unicorn.getFirstName() + " " + key);
@@ -269,8 +278,8 @@ public class Startup {
         Unicorn unicorn = unicornTypedQuery.getSingleResult();
         System.out.println("You have selected : " + unicorn.getFirstName());
         return unicorn;
-
     }
+
 //    private static void updateDisciplineStatus(Session session) {
 //        StoredProcedureQuery storedProcedure = session.createStoredProcedureQuery("UpdateDiscipline");
 //        storedProcedure.registerStoredProcedureParameter("firstName", String.class, ParameterMode.IN);

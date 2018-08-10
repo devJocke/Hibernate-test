@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
 
 public class AccessUnicorn {
@@ -14,7 +15,6 @@ public class AccessUnicorn {
 
     private static Session setupSessionConfiguration() {
         return new Configuration().configure()
-                .addAnnotatedClass(UnicornClass.class)
                 .addAnnotatedClass(Care.class)
                 .addAnnotatedClass(Unicorn.class)
                 .addAnnotatedClass(Toilet.class)
