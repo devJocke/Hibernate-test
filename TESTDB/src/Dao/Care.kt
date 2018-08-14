@@ -1,13 +1,12 @@
-package Data
+package Dao
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import javax.persistence.*
 import java.util.ArrayList
 import java.util.LinkedHashMap
 
 @Entity
 @Table(name = "Care", schema = "dbo", catalog = "mobileRemoteDb")
-class Care internal constructor() {
+class Care {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

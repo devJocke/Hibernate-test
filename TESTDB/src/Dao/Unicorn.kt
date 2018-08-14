@@ -1,4 +1,4 @@
-package Data
+package Dao
 
 import javax.persistence.*
 import java.util.Objects
@@ -6,7 +6,6 @@ import java.util.Objects
 @Entity
 @Table(name = "Unicorn", schema = "dbo", catalog = "mobileRemoteDb")
 class Unicorn {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,13 +18,18 @@ class Unicorn {
     @JoinColumn(name = "unicornCareId")
     var care: Care? = null
 
-    constructor() {}
+    @OneToOne(cascade = [(CascadeType.ALL)])
+    @JoinColumn(name = "farmId")
+    var farm: Farm? = null
+
+    constructor()
 
     private constructor(firstName: String, lastName: String, thirdName: String) {
         this.firstName = firstName
         this.lastName = lastName
         this.thirdName = thirdName
         care = Care().newUnicorn()
+        farm = Farm()
     }
 
     class UnicornBuilder(private val firstName: String, private val lastName: String, private val thirdName: String) {

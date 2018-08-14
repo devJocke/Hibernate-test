@@ -1,6 +1,6 @@
 import Dal.AccessUnicorn;
-import Data.Care;
-import Data.Unicorn;
+import Dao.Care;
+import Dao.Unicorn;
 import org.hibernate.*;
 
 import javax.persistence.TypedQuery;
@@ -8,9 +8,7 @@ import java.util.*;
 
 public class Startup {
 
-
     public static void main(String[] args) {
-
 
         /**
          * 0. First time start, create new unicorn
@@ -45,6 +43,8 @@ public class Startup {
         Startup startup = new Startup();
         try {
             Unicorn unicorn = AccessUnicorn.preLoadUnicorns();
+            System.out.println(unicorn.getFarm());
+
             if (unicorn.getFirstName() != null) {
                 startup.viewMainMenu(unicorn);
             } else {
@@ -52,6 +52,7 @@ public class Startup {
                 Unicorn newUnicorn = startup.createNewUnicornFromUserInput();
                 AccessUnicorn.createUnicorn(newUnicorn);
                 startup.viewMainMenu(newUnicorn);
+                System.out.println(unicorn.getFarm());
                 //FETCH CREATED  DATA
             }
         } catch (Throwable ex) {
@@ -66,6 +67,7 @@ public class Startup {
         System.out.println("1. Create new unicorn - DONT DO THIS YET");
         System.out.println("2. View existing one ");
         System.out.print("Make selection : ");
+        viewUnicornMenu(unicorn);
         try {
             Scanner scanner = new Scanner(System.in);
             int menuSelection = scanner.nextInt();
@@ -122,6 +124,7 @@ public class Startup {
         System.out.println("1. Check " + unicorn.getFirstName() + " status ");
         System.out.println("2. See beautiful " + unicorn.getFirstName());
         System.out.println("3. Update " + unicorn.getFirstName());
+        System.out.println("4. See "+ unicorn.getFirstName()+ "s farm");
         System.out.println("----------------------");
         System.out.print("Make selection : ");
 
@@ -129,7 +132,7 @@ public class Startup {
             Scanner scanner = new Scanner(System.in);
             int menuSelection = scanner.nextInt();
 
-            if (menuSelection > 0 && menuSelection < 4) {
+            if (menuSelection > 0 && menuSelection < 5) {
                 switch (menuSelection) {
                     case 1:
                         System.out.println(unicorn.getFirstName() + " needs some attention");
@@ -148,6 +151,9 @@ public class Startup {
                     case 3:
                         viewUpdateMenu(unicorn);
                         return;
+                    case 4:
+                        unicorn.getFarm().getFarmOverView();
+                        break;
                 }
             } else {
                 viewMainMenu(unicorn);
@@ -245,6 +251,7 @@ public class Startup {
             System.out.println(index + 1 + ". " + capitalizedWord);
             index++;
         }
+
     }
 
     private boolean isCollectionOutsideCategoryRange(int selectedCategory, int size) {

@@ -1,10 +1,10 @@
-package Data
+package Dao
 
 import java.util.LinkedHashMap
 import javax.persistence.*
 
 @Entity
-class Discipline internal constructor() : Care.CareInformation {
+class Discipline : Care.CareInformation {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

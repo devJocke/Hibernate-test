@@ -1,7 +1,0 @@
-
-class Farm{
-
-    fun initializeFarming(){
-
-    }
-}

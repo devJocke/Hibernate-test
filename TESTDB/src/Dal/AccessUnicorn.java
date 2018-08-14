@@ -1,28 +1,16 @@
 package Dal;
 
-import Data.*;
+import Dao.*;
 import org.hibernate.Session;
-import org.hibernate.cfg.Configuration;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Transient;
 import javax.persistence.TypedQuery;
+import java.util.Objects;
 
 public class AccessUnicorn {
 
-    private static Session session = setupSessionConfiguration();
+    private static Session session = SessionConfiguration.getSession();
     private static Unicorn unicorn;
-
-    private static Session setupSessionConfiguration() {
-        return new Configuration().configure()
-                .addAnnotatedClass(Care.class)
-                .addAnnotatedClass(Unicorn.class)
-                .addAnnotatedClass(Toilet.class)
-                .addAnnotatedClass(Discipline.class)
-                .addAnnotatedClass(Play.class)
-                .buildSessionFactory().openSession();
-    }
-
 
     public static void createUnicorn(Unicorn newUnicorn) {
         session.beginTransaction();
@@ -36,7 +24,7 @@ public class AccessUnicorn {
             session.beginTransaction();
             TypedQuery<Unicorn> unicornTypedQuery = session.createNativeQuery("select * from Unicorn", Unicorn.class);
             unicorn = unicornTypedQuery.getSingleResult();
-            unicorn.getCare().loadAllNeeds();
+            Objects.requireNonNull(unicorn.getCare()).loadAllNeeds();
             session.getTransaction().commit();
             return unicorn;
         } catch (NoResultException e) {

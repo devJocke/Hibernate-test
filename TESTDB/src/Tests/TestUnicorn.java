@@ -1,6 +1,6 @@
 import Dal.AccessUnicorn;
-import Data.Care;
-import Data.Unicorn;
+import Dao.Care;
+import Dao.Unicorn;
 import org.junit.jupiter.api.Test;
 
 class TestUnicorn {
