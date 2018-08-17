@@ -43,7 +43,6 @@ public class Startup {
         Startup startup = new Startup();
         try {
             Unicorn unicorn = AccessUnicorn.preLoadUnicorns();
-            System.out.println(unicorn.getFarm());
 
             if (unicorn.getFirstName() != null) {
                 startup.viewMainMenu(unicorn);
@@ -67,7 +66,7 @@ public class Startup {
         System.out.println("1. Create new unicorn - DONT DO THIS YET");
         System.out.println("2. View existing one ");
         System.out.print("Make selection : ");
-        viewUnicornMenu(unicorn);
+//        viewUnicornMenu(unicorn);
         try {
             Scanner scanner = new Scanner(System.in);
             int menuSelection = scanner.nextInt();
@@ -124,7 +123,7 @@ public class Startup {
         System.out.println("1. Check " + unicorn.getFirstName() + " status ");
         System.out.println("2. See beautiful " + unicorn.getFirstName());
         System.out.println("3. Update " + unicorn.getFirstName());
-        System.out.println("4. See "+ unicorn.getFirstName()+ "s farm");
+        System.out.println("4. See " + unicorn.getFirstName() + "s farm");
         System.out.println("----------------------");
         System.out.print("Make selection : ");
 
@@ -152,7 +151,7 @@ public class Startup {
                         viewUpdateMenu(unicorn);
                         return;
                     case 4:
-                        unicorn.getFarm().getFarmOverView();
+//                        unicorn.getFarm().getFarmOverView();
                         break;
                 }
             } else {
@@ -186,7 +185,7 @@ public class Startup {
             System.err.println("Invalid input provided, use numerics only 1-9");
             createNewUnicornFromUserInput();
         }
-        return new Unicorn();
+        return null;
     }
 
     /**
@@ -197,8 +196,8 @@ public class Startup {
     private void viewUpdateMenu(Unicorn unicorn) {
 
         //MUST BE FALSE
-        AccessUnicorn.checkForUpdatedData(unicorn);
 
+        AccessUnicorn.checkForUpdatedData(unicorn);
         List<Care.CareInformation> allCategoriesInNeed = unicorn.getCare().getNeeds();
 
         System.out.println("--------UPDATE MENU-----------");

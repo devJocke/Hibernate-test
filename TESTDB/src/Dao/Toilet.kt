@@ -6,6 +6,16 @@ import java.util.LinkedHashMap
 
 @Entity
 class Toilet : Care.CareInformation {
+    @Transient
+    private val properties = javaClass.declaredFields
+
+    override fun checkForUpdates() {
+        for (i in properties.indices) {
+            if (properties[i].type.toString() == "boolean" && !properties[i].getBoolean(this)) {
+                map[properties[i].name] = properties[i].getBoolean(this)
+            }
+        }
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +34,6 @@ class Toilet : Care.CareInformation {
     }
 
     override fun categories(): LinkedHashMap<String, Boolean> {
-        if (!flush) {
-            map["flush"] = flush
-        }
         return map
     }
 

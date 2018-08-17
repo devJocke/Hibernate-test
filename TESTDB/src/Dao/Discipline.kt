@@ -6,6 +6,17 @@ import javax.persistence.*
 @Entity
 class Discipline : Care.CareInformation {
 
+    @Transient
+    private val properties = javaClass.declaredFields
+
+    override fun checkForUpdates() {
+        for (i in properties.indices) {
+            if (properties[i].type.toString() == "boolean" && !properties[i].getBoolean(this)) {
+                map[properties[i].name] = properties[i].getBoolean(this)
+            }
+        }
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int = 0
@@ -20,10 +31,7 @@ class Discipline : Care.CareInformation {
     }
 
 
-      override fun categories(): LinkedHashMap<String, Boolean> {
-        if (!angry) {
-            map["angry"] = angry
-        }
+    override fun categories(): LinkedHashMap<String, Boolean> {
         return map
     }
 

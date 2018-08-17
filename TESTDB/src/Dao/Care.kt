@@ -1,7 +1,6 @@
 package Dao
 
 import javax.persistence.*
-import java.util.ArrayList
 import java.util.LinkedHashMap
 
 @Entity
@@ -26,7 +25,7 @@ class Care {
     private var toilet: Toilet
 
     @Transient
-    private val needs = ArrayList<CareInformation>()
+    private val needs = mutableListOf<CareInformation>()
 
 
     init {
@@ -35,7 +34,7 @@ class Care {
         toilet = Toilet()
     }
 
-      fun newUnicorn(): Care {
+    fun newUnicorn(): Care {
         discipline = Discipline().newUnicorn()
         play = Play().newUnicorn()
         toilet = Toilet().newUnicorn()
@@ -45,22 +44,10 @@ class Care {
         return this
     }
 
-    /**
-     * Sets all information about the unicorn
-     */
     fun loadAllNeeds() {
-
-        if (!needs.contains(play)) {
-            needs.add(play)
-        }
-
-        if (!needs.contains(discipline)) {
-            needs.add(discipline)
-        }
-        if (!needs.contains(toilet)) {
-            needs.add(toilet)
-        }
-        needs.removeIf { careInformation -> careInformation.categories().isEmpty() }
+        needs.addIfHasCategories(play)
+        needs.addIfHasCategories(discipline)
+        needs.addIfHasCategories(toilet)
     }
 
     fun getNeeds(): List<CareInformation> {
@@ -79,5 +66,19 @@ class Care {
 
         fun newUnicorn(): Care.CareInformation
         fun save(key: String): String
+        fun checkForUpdates()
+    }
+
+    /**
+     * If there are no categories in provided careinformation, remove it from the list so we dont display it for the user
+     * else if the list does not contain the careinformation add it
+     */
+    private fun MutableList<Care.CareInformation>.addIfHasCategories(careInformation: Care.CareInformation) {
+        careInformation.checkForUpdates()
+        if (careInformation.categories().isEmpty()) {
+            remove(careInformation)
+        } else if (!contains(careInformation)) {
+            add(careInformation)
+        }
     }
 }

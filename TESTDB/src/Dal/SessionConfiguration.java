@@ -16,7 +16,7 @@ public class SessionConfiguration {
                 .addAnnotatedClass(Discipline.class)
                 .addAnnotatedClass(Play.class)
                 .addAnnotatedClass(Farm.class)
-                .addAnnotatedClass(Blueprints.class)
+//                .addAnnotatedClass(Blueprints.class)
                 .buildSessionFactory().openSession();
     }
 
