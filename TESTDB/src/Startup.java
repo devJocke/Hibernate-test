@@ -234,9 +234,9 @@ public class Startup {
 
         Scanner subCategoryIndex = new Scanner(System.in);
         int selectedSubCategory = subCategoryIndex.nextInt() - 1;
-        if (isCollectionOutsideCategoryRange(selectedSubCategory, careInformation.categories().size())) {
+        if (isCollectionOutsideCategoryRange(selectedSubCategory, careInformation.getCategories().size())) {
             viewUpdateMenu(unicorn);
-        } else if (selectedSubCategory <= careInformation.categories().size()) {
+        } else if (selectedSubCategory <= careInformation.getCategories().size()) {
             AccessUnicorn.checkForUpdatedData(unicorn);
             updateSubCategories(unicorn, careInformation, selectedSubCategory);
         }
@@ -244,7 +244,7 @@ public class Startup {
 
     private void showAllSubCategories(Care.CareInformation unicornCareInformations) {
         int index = 0;
-        Set<Map.Entry<String, Boolean>> categories = unicornCareInformations.categories().entrySet();
+        Set<Map.Entry<String, Boolean>> categories = unicornCareInformations.getCategories().entrySet();
         for (Map.Entry<String, Boolean> subCategories : categories) {
             String capitalizedWord = subCategories.getKey().substring(0, 1).toUpperCase() + subCategories.getKey().substring(1).toLowerCase();
             System.out.println(index + 1 + ". " + capitalizedWord);
@@ -259,7 +259,7 @@ public class Startup {
 
     private void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
 
-        String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.categories(), selectedCategory));
+        String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.getCategories(), selectedCategory));
         System.out.println("----------------------");
         System.out.println("----------------------");
         System.out.println(unicorn.getFirstName() + " " + key);

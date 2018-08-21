@@ -4,43 +4,36 @@ import java.util.LinkedHashMap
 import javax.persistence.*
 
 @Entity
-class Discipline : Care.CareInformation {
-
-    @Transient
-    private val properties = javaClass.declaredFields
-
-    override fun checkForUpdates() {
-        for (i in properties.indices) {
-            if (properties[i].type.toString() == "boolean" && !properties[i].getBoolean(this)) {
-                map[properties[i].name] = properties[i].getBoolean(this)
-            }
-        }
-    }
+class Discipline : Care.CareInformation, DaoMaster() {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Int = 0
+
     var angry: Boolean = false
 
     @Transient
-    private val map = LinkedHashMap<String, Boolean>()
+    private var unicornProperties = LinkedHashMap<String, Boolean>()
 
     override fun newUnicorn(): Discipline {
-        map["angry"] = false
+        unicornProperties = setNewUnicorn(unicornProperties)
         return this
     }
 
-
-    override fun categories(): LinkedHashMap<String, Boolean> {
-        return map
+    /**
+     * Adds false values to the unicornProperties
+     */
+    override fun checkForUpdates() {
+        unicornProperties = checkAndReturnUpdates(unicornProperties)
     }
 
     override fun save(key: String): String {
-        if (key == "angry") {
-            angry = true
-            map.remove(key)
-        }
-        return "is no longer $key"
+        unicornProperties.remove(saveChanges(key))
+        return "enjoyed playing $key"
+    }
+
+    override fun getCategories(): LinkedHashMap<String, Boolean> {
+        return unicornProperties
     }
 
     override fun toString(): String {

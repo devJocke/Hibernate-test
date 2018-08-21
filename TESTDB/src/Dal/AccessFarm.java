@@ -27,9 +27,9 @@ public class AccessFarm {
         }
     }
 
-//    public static void createUnicorn(Unicorn newUnicorn) {
+//    public static void createUnicorn(Unicorn setNewUnicorn) {
 //        session.beginTransaction();
-//        session.save(newUnicorn);
+//        session.save(setNewUnicorn);
 //        session.getTransaction().commit();
 //    }
 //

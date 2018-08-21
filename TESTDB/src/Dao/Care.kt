@@ -62,8 +62,7 @@ class Care {
          * [Play]
          * [Toilet]
          */
-        fun categories(): LinkedHashMap<String, Boolean>
-
+        fun getCategories(): LinkedHashMap<String, Boolean>
         fun newUnicorn(): Care.CareInformation
         fun save(key: String): String
         fun checkForUpdates()
@@ -75,7 +74,7 @@ class Care {
      */
     private fun MutableList<Care.CareInformation>.addIfHasCategories(careInformation: Care.CareInformation) {
         careInformation.checkForUpdates()
-        if (careInformation.categories().isEmpty()) {
+        if (careInformation.getCategories().isEmpty()) {
             remove(careInformation)
         } else if (!contains(careInformation)) {
             add(careInformation)
