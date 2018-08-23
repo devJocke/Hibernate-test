@@ -17,5 +17,4 @@
         <!--<<property name="cache.use_second_level_cache">true</property>-->
         <!--<property name="hibernate.cache.region.factory_class">org.hibernate.</property>-->
     </session-factory>
-
 </hibernate-configuration>

@@ -4,6 +4,8 @@ import Dao.*;
 import org.hibernate.Session;
 import org.hibernate.cfg.Configuration;
 
+import java.util.logging.Level;
+
 public class SessionConfiguration {
 
     private static Session session = setupSessionConfiguration();

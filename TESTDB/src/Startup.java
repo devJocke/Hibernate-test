@@ -1,10 +1,12 @@
 import Dal.AccessUnicorn;
 import Dao.Care;
 import Dao.Unicorn;
+import org.apache.log4j.BasicConfigurator;
 import org.hibernate.*;
 
 import javax.persistence.TypedQuery;
 import java.util.*;
+import java.util.logging.Level;
 
 public class Startup {
 
@@ -44,6 +46,8 @@ public class Startup {
          */
         Startup startup = new Startup();
         try {
+            BasicConfigurator.configure();
+            System.out.println("Fetching data....");
             Unicorn unicorn = AccessUnicorn.preLoadUnicorns();
 
             if (unicorn.getFirstName() != null) {
