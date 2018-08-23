@@ -45,6 +45,7 @@ class Care {
     }
 
     fun loadAllNeeds() {
+        //reflection?
         needs.addIfHasCategories(play)
         needs.addIfHasCategories(discipline)
         needs.addIfHasCategories(toilet)
@@ -54,7 +55,6 @@ class Care {
         return needs
     }
 
-
     interface CareInformation {
         /**
          * @return All subcategories in a category eg
@@ -63,6 +63,7 @@ class Care {
          * [Toilet]
          */
         fun getCategories(): LinkedHashMap<String, Boolean>
+
         fun newUnicorn(): Care.CareInformation
         fun save(key: String): String
         fun checkForUpdates()

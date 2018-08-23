@@ -39,6 +39,8 @@ public class Startup {
          *
          * xx. Tests
          *
+         * If more users are on the same account race conditions occurs
+         *
          */
         Startup startup = new Startup();
         try {
@@ -118,13 +120,13 @@ public class Startup {
             return;
         }
 
-        System.out.println("-------- UNICORN MENU ----------");
+        System.out.println("------ UNICORN MENU ------");
         System.out.println("0. Main menu");
         System.out.println("1. Check " + unicorn.getFirstName() + " status ");
         System.out.println("2. See beautiful " + unicorn.getFirstName());
         System.out.println("3. Update " + unicorn.getFirstName());
         System.out.println("4. See " + unicorn.getFirstName() + "s farm");
-        System.out.println("----------------------");
+        System.out.println("--------------------------");
         System.out.print("Make selection : ");
 
         try {
@@ -134,23 +136,24 @@ public class Startup {
             if (menuSelection > 0 && menuSelection < 5) {
                 switch (menuSelection) {
                     case 1:
-                        System.out.println(unicorn.getFirstName() + " needs some attention");
-                        System.out.println(unicorn.getCare().getNeeds());
+                        System.out.println("\n" + unicorn.getFirstName() + " needs some attention");
+                        System.out.println(unicorn.getCare().getNeeds() + "\n");
                         break;
                     case 2:
-                        System.out.println("\\\n" +
-                                " \\ji\n" +
-                                " /.((( \n" +
-                                "(,/\"(((__,--.\n" +
-                                "    \\  ) _( /{ \n" +
-                                "    !|| \" :||      \n" +
-                                "    !||   :|| \n" +
-                                "    '''   ''' ");
+                        System.out.println("\t\\\n" +
+                                "\t \\ji\n" +
+                                "\t /.((( \n" +
+                                "\t(,/\"(((__,--.\n" +
+                                "\t    \\  ) _( /{ \n" +
+                                "\t    !|| \" :||      \n" +
+                                "\t    !||   :|| \n" +
+                                "\t    '''   ''' ");
                         break;
                     case 3:
                         viewUpdateMenu(unicorn);
                         return;
                     case 4:
+                        System.err.println(unicorn.getFirstName() + " does not have any farm yet");
 //                        unicorn.getFarm().getFarmOverView();
                         break;
                 }
@@ -168,7 +171,6 @@ public class Startup {
 
         try {
             Scanner userInput = new Scanner(System.in);
-            // TODO : GET COLUMNS PROPMPT NAME FROM ALL OF THEM INSTEAD OF HARDCODING
             System.out.print("Enter unicorn firstname: ");
             String firstName = userInput.next();
             String upperCaseFirstName = firstName.substring(0, 1).toUpperCase() + firstName.substring(1).toLowerCase();
@@ -199,8 +201,7 @@ public class Startup {
 
         AccessUnicorn.checkForUpdatedData(unicorn);
         List<Care.CareInformation> allCategoriesInNeed = unicorn.getCare().getNeeds();
-
-        System.out.println("--------UPDATE MENU-----------");
+        System.out.println("------ UPDATE MENU ------");
         System.out.println("0. Go back");
         for (int i = 0; i < allCategoriesInNeed.size(); i++) {
             System.out.println(i + 1 + ". " + allCategoriesInNeed.get(i));
@@ -259,11 +260,12 @@ public class Startup {
 
     private void updateSubCategories(Unicorn unicorn, Care.CareInformation categoryToUpdate, int selectedCategory) {
 
-        String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.getCategories(), selectedCategory));
-        System.out.println("----------------------");
-        System.out.println("----------------------");
-        System.out.println(unicorn.getFirstName() + " " + key);
-        AccessUnicorn.updateUnicornNeeds(unicorn);
+        if (selectedCategory < categoryToUpdate.getCategories().size()) {
+            String key = categoryToUpdate.save(getElementByIndex(categoryToUpdate.getCategories(), selectedCategory));
+            System.out.println("-------------------------");
+            System.out.println(unicorn.getFirstName() + " " + key);
+            AccessUnicorn.updateUnicornNeeds(unicorn);
+        }
     }
 
     private String getElementByIndex(Map<String, Boolean> map, int index) {
